@@ -511,7 +511,7 @@ form.form-search .tierHelp {
     font-size: 1.2em;
 }
 #rangeSliderWrapper{
-    height: 60px;
+    height: 20px;
     position: relative;
     border: 2px solid #C8C8C8 !important;
 }
@@ -885,7 +885,14 @@ label.errorTier {
     color:#ccc;
 }
 #left .child-nodesw ul li a:hover{
-    background: transparent;
+    border-bottom: none;
+    margin:0;
+    color:#ccc;
+}
+
+.nav-list > .statsActive > a, .nav-list > .statsActive > a:hover, .nav-list > .statsActive > a:focus{
+   background:#777d88;
+   color:#FFF;
 }
 .doc-search-result {
 	margin-bottom: 15px;
@@ -943,7 +950,7 @@ label.errorTier {
         background: #fff url(../images/back-normal.png) repeat-y left top;
     }
 	#middle{
-		width:65%;
+		width:60%;
 	}
     #left{
         width:251px;
@@ -1236,4 +1243,69 @@ float: right;
 .modal-footer .btn{
 float:right;
 margin: 2px;
+}
+
+#dateRangePickerContainer .date-range, #dateRangePickerContainer .input-append {
+    background: none !important;
+}
+
+#apiTable th {
+  cursor: pointer;
+  padding-left:20px;
+}
+
+#apiTable th.headerSortUp {
+    background-image: url(../images/sort_asc.png);
+    background-color: #ADD8E6;
+}
+
+#apiTable th.headerSortDown {
+    background-image: url(../images/sort_desc.png);
+    background-color: #ADD8E6;
+}
+
+#apiTable th.header {
+    cursor: pointer;
+    font-weight: bold;
+    background-repeat: no-repeat;
+    background-position: center left;
+    border-right: 1px solid #dad9c7;
+    margin-left: -1px;
+    height: inherit;
+    position: static;
+    width: auto;
+    z-index: inherit;
+}
+
+#resourcePathUsageTable th {
+  cursor: pointer;
+  padding-left:20px;
+}
+
+#resourcePathUsageTable th.headerSortUp {
+    background-image: url(../images/sort_asc.png);
+    background-color: #ADD8E6;
+}
+
+#resourcePathUsageTable th.headerSortDown {
+    background-image: url(../images/sort_desc.png);
+    background-color: #ADD8E6;
+}
+
+#resourcePathUsageTable th.header {
+    cursor: pointer;
+    font-weight: bold;
+    background-repeat: no-repeat;
+    background-position: center left;
+    border-right: 1px solid #dad9c7;
+    margin-left: -1px;
+    height: inherit;
+    position: static;
+    width: auto;
+    z-index: inherit;
+}
+
+#dateRangePickerContainer{
+    float:right;
+    margin-top:-6px;
 }

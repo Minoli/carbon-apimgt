@@ -653,6 +653,7 @@ public class APIUsageStatisticsClient {
                     usageDTO.setMethod(usage.method);
                     usageDTO.setContext(usage.context);
                     usageDTO.setCount(usage.requestCount);
+                    usageDTO.setTime(usage.time);
                     usageByResourcePath.add(usageDTO);
                 }
             }
@@ -1374,14 +1375,22 @@ public class APIUsageStatisticsClient {
             statement = connection.createStatement();
             String query;
             if (selectRowsByColumnName != null) {
-                query = "SELECT api,version,apiPublisher,context,method,SUM(total_request_count) as total_request_count FROM  " +
+//                query = "SELECT api,version,apiPublisher,context,method,SUM(total_request_count) as total_request_count FROM  " +
+//                        columnFamily + " WHERE " + selectRowsByColumnName +
+//                        "=\'" + selectRowsByColumnValue + "\' AND " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
+//                        "\'" + fromDate + "\' AND \'" + toDate + "\'" + " GROUP BY api,version,apiPublisher,context,method";
+
+                query = "SELECT api,version,apiPublisher,context,method,total_request_count,time FROM  " +
                         columnFamily + " WHERE " + selectRowsByColumnName +
                         "=\'" + selectRowsByColumnValue + "\' AND " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
-                        "\'" + fromDate + "\' AND \'" + toDate + "\'" + " GROUP BY api,version,apiPublisher,context,method";
+                        "\'" + fromDate + "\' AND \'" + toDate+ "\'";
             } else {
-                query = "SELECT api,version,apiPublisher,context,method,SUM(total_request_count) as total_request_count FROM  "
+//                query = "SELECT api,version,apiPublisher,context,method,SUM(total_request_count) as total_request_count FROM  "
+//                        + columnFamily + " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
+//                        "\'" + fromDate + "\' AND \'" + toDate + "\'" + " GROUP BY api,version,apiPublisher,context,method";
+                query = "SELECT api,version,apiPublisher,context,method,total_request_count,time FROM  "
                         + columnFamily + " WHERE " + APIUsageStatisticsClientConstants.TIME + " BETWEEN " +
-                        "\'" + fromDate + "\' AND \'" + toDate + "\'" + " GROUP BY api,version,apiPublisher,context,method";
+                        "\'" + fromDate + "\' AND \'" + toDate+ "\'";
             }
             rs = statement.executeQuery(query);
             StringBuilder returnStringBuilder = new StringBuilder("<omElement><rows>");
@@ -2164,6 +2173,7 @@ public class APIUsageStatisticsClient {
         private String method;
         private String context;
         private long requestCount;
+        private String time;
 
         public APIUsageByResourcePath(OMElement row) {
             apiName = row.getFirstChildWithName(new QName(
@@ -2176,6 +2186,8 @@ public class APIUsageStatisticsClient {
                     APIUsageStatisticsClientConstants.CONTEXT)).getText();
             requestCount = (long) Double.parseDouble(row.getFirstChildWithName(new QName(
                     APIUsageStatisticsClientConstants.REQUEST)).getText());
+            time=row.getFirstChildWithName(new QName(
+                    APIUsageStatisticsClientConstants.TIME)).getText();
         }
     }
 
