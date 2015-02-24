@@ -26,6 +26,9 @@
 <div class="title-section"> <h2><%=i18n.localize("apiUsageFromResourcePathTitle")%></h2></div>
 
 <div class="content-section shadow-up">
+
+
+
 <div class="content-data">
     <div id="rangeSliderWrapper" class="well">
         <div class="row-fluid">
@@ -62,8 +65,18 @@
         </div>
         <div class="span6">&nbsp;</div>
         <div class="span11">
+
+            <div id="light" class="white_content">
+            <div style="float:right">
+                <a href = "javascript:void(0)" onclick = "$('#light').css('display','none');$('#fade').css('display','none');"><i class="icon icon-remove"></i></a>
+            </div>
+            <div id="chartContainer"></div>
+            </div>
+            <div id="fade" class="black_overlay"></div>
+
             <div id="tableContainer"></div>
-            <div id="chartContainer">
+
+
         </div>
     </div>
 </div>

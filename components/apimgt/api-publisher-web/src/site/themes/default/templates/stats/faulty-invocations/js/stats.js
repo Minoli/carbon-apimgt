@@ -27,31 +27,107 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                 if( json.usage && json.usage.length > 0){
                     var d = new Date();
                     var firstAccessDay = new Date(json.usage[0].year, json.usage[0].month-1, json.usage[0].day);
-                    var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-                    if(firstAccessDay.valueOf() == currentDay.valueOf()){
-                        currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);
-                    }
-                    var rangeSlider =  $("#rangeSlider");
-                    //console.info(currentDay);
-                    rangeSlider.dateRangeSlider({
-                        "bounds":{
-                            min: firstAccessDay,
-                            max: currentDay
-                        },
-                        "defaultValues":{
-                            min: firstAccessDay,
-                            max: currentDay
-                        }
-                    });
-                    rangeSlider.bind("valuesChanged", function(e, data){
-                        var from = convertTimeString(data.values.min);
-                        var to = convertTimeStringPlusDay(data.values.max);
+                    var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());
 
+                    //day picker
+                    $('#today-btn').on('click',function(){
+                        var to = convertTimeString(currentDay);
+                        var from = convertTimeString(currentDay-86400000);
+                        var dateStr= from+" to "+to;
+                        $("#date-range").html(dateStr);
+                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
+                        drawAPIResponseFaultCountTable(from,to);
+                        drawAPIResponseFaultCountChart(from,to);
+
+                    });
+
+                    //hour picker
+                    $('#hour-btn').on('click',function(){
+                        var to = convertTimeString(currentDay);
+                        var from = convertTimeString(currentDay-3600000);
+                        var dateStr= from+" to "+to;
+                        $("#date-range").html(dateStr);
+                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
+                        drawAPIResponseFaultCountTable(from,to);
+                        drawAPIResponseFaultCountChart(from,to);
+                    })
+
+                    //week picker
+                    $('#week-btn').on('click',function(){
+                        var to = convertTimeString(currentDay);
+                        var from = convertTimeString(currentDay-604800000);
+                        var dateStr= from+" to "+to;
+                        $("#date-range").html(dateStr);
+                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
+                        drawAPIResponseFaultCountTable(from,to);
+                        drawAPIResponseFaultCountChart(from,to);
+                    })
+
+                    //month picker
+                    $('#month-btn').on('click',function(){
+
+                        var to = convertTimeString(currentDay);
+                        var from = convertTimeString(currentDay-(604800000*4));
+                        var dateStr= from+" to "+to;
+                        $("#date-range").html(dateStr);
+                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
                         drawAPIResponseFaultCountTable(from,to);
                         drawAPIResponseFaultCountChart(from,to);
                     });
+
+                    //date picker
+                    $('#date-range').dateRangePicker(
+                        {
+                            startOfWeek: 'monday',
+                            separator : ' to ',
+                            format: 'YYYY-MM-DD HH:mm',
+                            autoClose: false,
+                            time: {
+                                enabled: true
+                            },
+                            shortcuts:'hide',
+                            endDate:currentDay
+                        })
+                        .bind('datepicker-change',function(event,obj)
+                        {
+
+                        })
+                        .bind('datepicker-apply',function(event,obj)
+                        {
+                             var from = convertDate(obj.date1);
+                             var to = convertDate(obj.date2);
+                             $('#date-range').html(from + " to "+ to);
+                             drawAPIResponseFaultCountTable(from,to);
+                             drawAPIResponseFaultCountChart(from,to);
+                        })
+                        .bind('datepicker-close',function()
+                        {
+                    });
+
+                    //setting default date
+                    var to = new Date();
+                    var from = new Date(to.getTime() - 1000 * 60 * 60 * 24 * 30);
+
+                    $('#date-range').data('dateRangePicker').setDateRange(from,to);
+                    $('#date-range').html($('#date-range').val());
+                    var fromStr = convertDate(from);
+                    var toStr = convertDate(to);
+                    drawAPIResponseFaultCountTable(fromStr,toStr);
+                    drawAPIResponseFaultCountChart(fromStr,toStr);
+
+
+                    $('#date-range').click(function (event) {
+                    event.stopPropagation();
+                    });
+
+                    $('body').on('click', '.btn-group button', function (e) {
+                        $(this).addClass('active');
+                        $(this).siblings().removeClass('active');
+                    });
+
+
                     var width = $("#rangeSliderWrapper").width();
-                    $("#rangeSliderWrapper").affix();
+                    //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
 
                 }
@@ -242,7 +318,7 @@ function isDataPublishingEnabled(){
 
 var convertTimeString = function(date){
     var d = new Date(date);
-    var formattedDate = d.getFullYear() + "-" + formatTimeChunk((d.getMonth()+1)) + "-" + formatTimeChunk(d.getDate());
+    var formattedDate = d.getFullYear() + "-" + formatTimeChunk((d.getMonth()+1)) + "-" + formatTimeChunk(d.getDate())+" "+formatTimeChunk(d.getHours())+":"+formatTimeChunk(d.getMinutes());
     return formattedDate;
 };
 
@@ -259,3 +335,12 @@ var formatTimeChunk = function (t){
     return t;
 };
 
+function convertDate(date) {
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour=date.getHours();
+    var minute=date.getMinutes();
+    return date.getFullYear() + '-' + (('' + month).length < 2 ? '0' : '')
+        + month + '-' + (('' + day).length < 2 ? '0' : '') + day +" "+ (('' + hour).length < 2 ? '0' : '')
+        + hour +":"+(('' + minute).length < 2 ? '0' : '')+ minute;
+}

@@ -31,27 +31,6 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     var d = new Date();
                     var firstAccessDay = new Date(json.usage[0].year, json.usage[0].month - 1, json.usage[0].day);
                     var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());//                    if (firstAccessDay.valueOf() == currentDay.valueOf()) {
-//                        currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
-//                    }
-//                    var rangeSlider = $("#rangeSlider");
-//                    //console.info(currentDay);
-//                    rangeSlider.dateRangeSlider({
-//                        "bounds": {
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        },
-//                        "defaultValues": {
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        }
-//                    });
-//                    rangeSlider.bind("valuesChanged", function (e, data) {
-//                        var from = convertTimeString(data.values.min);
-//                        var to = convertTimeStringPlusDay(data.values.max);
-//
-//                        drawProviderAPIServiceTime(from, to);
-//
-//                    });
 
                     //day picker
                     $('#today-btn').on('click',function(){
@@ -144,7 +123,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     });
 
                     var width = $("#rangeSliderWrapper").width();
-                    $("#rangeSliderWrapper").affix();
+                    //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
 
                 }
@@ -180,96 +159,260 @@ var drawProviderAPIServiceTime = function (from, to) {
     jagg.post("/site/blocks/stats/api-response-times/ajax/stats.jag", { action: "getProviderAPIServiceTime", currentLocation: currentLocation, fromDate: fromDate, toDate: toDate },
         function (json) {
             if (!json.error) {
-                var length = json.usage.length, s1 = [];
-                var data = [];
-                $('#serviceTimeChart').empty();
-                for (var i = 0; i < length; i++) {
-                    data[i] = [json.usage[i].apiName, parseFloat(json.usage[i].serviceTime)];
-                    //add fake value to overcome dojo chart single series issue
-                    if (length === 1) {
-                        data.push(["", 0]);
+
+                    var length = json.usage.length, s1 = [];
+                    var data = [];
+                    $('#checkboxContainer').empty();
+                    $('#serviceTimeChart').empty();
+                    var $dataTable = $('<table class="display" width="100%" cellspacing="0" id="apiSelectTable"></table>');
+                        $dataTable.append($('<thead class="tableHead"><tr>' +
+                            '<th width="10%"></th>' +
+                            '<th>API</th>' +
+                            '<th>Response Time(ms)</th>'+
+                            '</tr></thead>'));
+
+                    var filterValues = [];
+                    var defaultFilterValues = [];
+                    var state_array = [];
+
+                    $('#checkboxContainer').append($dataTable);
+                    $('#checkboxContainer').show();
+
+                        for (var i = 0; i < length; i++) {
+                            data[i] = [json.usage[i].apiName, parseFloat(json.usage[i].serviceTime)];
+                        }
+
+                        data.sort(function(obj1, obj2) {
+                             return obj2[1] - obj1[1];
+                        });
+
+                        for (var i = 0; i < data.length; i++) {
+                        //add fake value to overcome dojo chart single series issue
+                        if (length === 1) {
+                            defaultFilterValues.push(["", 0]);
+                        }
+
+                        if(i<9){
+                        $dataTable.append($('<tr><td >'
+                                        + '<input name="item_checkbox"  checked   id=' + i + '  type="checkbox"  data-item=' + data[i][0]
+                                        + ' class="inputCheckbox" />'
+                                        + '</td><td style="text-align:left;"><label for=' + i + '>' + data[i][0] + '</label></td>'
+                                        + '<td style="text-align:right;"><label for=' + i + '>' + data[i][1] + '</label></td></tr>'));
+                                    filterValues.push([data[i][0],data[i][1]]);
+                                    state_array.push(true);
+                                    defaultFilterValues.push([data[i][0],data[i][1]]);
+
+                                } else {
+
+                                    $dataTable.append($('<tr><td >'
+                                         + '<input name="item_checkbox"    id=' + i + '  type="checkbox"  data-item=' + data[i][0]
+                                         + ' class="inputCheckbox" />'
+                                         + '</td><td style="text-align:left;"><label for=' + i + '>' + data[i][0] + '</label></td>'
+                                         + '<td style="text-align:right;"><label for=' + i + '>' + data[i][1] + '</label></td></tr>'));
+                                    filterValues.push([data[i][0],data[i][1]]);
+                                    state_array.push(false);
+
+                                }
                     }
-                    //s1.push(tmp);
-                }
-
-                if (length > 0) {
-                    var height = 200;
-                    if (30 * length > 200) height = 30 * length;
-                    $('#serviceTimeChart').height(height);
-                    require([
-                        // Require the basic chart class
-                        "dojox/charting/Chart",
-
-                        // Require the theme of our choosing
-                        "dojox/charting/themes/ApimDefault",
-
-                        // Tooltip
-                        "dojox/charting/action2d/Tooltip",
-                        // Require the highlighter
-                        "dojox/charting/action2d/Highlight",
-
-                        //  We want to plot bars
-                        "dojox/charting/plot2d/Bars",
-
-                        //  We want to use Markers
-                        "dojox/charting/plot2d/Markers",
-
-                        //  We'll use default x/y axes
-                        "dojox/charting/axis2d/Default",
-
-                        //mouse zoom and pan
-                        "dojox/charting/action2d/MouseZoomAndPan",
-
-                        // Wait until the DOM is ready
-                        "dojo/domReady!"
-                    ], function (Chart, theme, MouseZoomAndPan, Highlight) {
-
-
-
-
-                        // Create the chart within it's "holding" node
-                        var serviceTimeChart = new Chart("serviceTimeChart");
-
-                        // Set the theme
-                        serviceTimeChart.setTheme(theme);
-
-                        // Add the only/default plot
-                        serviceTimeChart.addPlot("default", {
-                            type: "Bars",
-                            markers: true,
-                            gap: 5,
-                            animate: {duration: 1000}
+                    $('#checkboxContainer').append($dataTable);
+                        $('#checkboxContainer').show();
+                        $('#apiSelectTable').DataTable({
+                            retrieve: true,
+                            "order": [
+                                [ 2, "desc" ]
+                            ],
+                            "aoColumns": [
+                                { "bSortable": false },
+                                null,
+                                null
+                            ],
                         });
 
-                        // Add axes
-                        serviceTimeChart.addAxis("x", {  fixLower: "major", fixUpper: "major" });
-                        serviceTimeChart.addAxis("y", {vertical: true,
-                            labels: dojo.map(data, function (value, index) {
-                                return {value: index + 1, text: value[0]};
-                            })
-                        });
+                    if (length > 0) {
+                        var height = 450;
+                        if (30 * length > 450) height = 30 * length;
+                        $('#serviceTimeChart').height(height);
+                        require([
+                            // Require the basic chart class
+                            "dojox/charting/Chart",
 
-                        // Define the data
-                        var chartData;
-                        var color = -1;
-                        require(["dojo/_base/array"], function (array) {
-                            chartData = array.map(data, function (d) {
-                                color++;
-                                return {y: d[1], text: d[0], tooltip: "<b>" + d[0] + "</b><br /><i>" + d[1] + "ms</i>", fill: "#0099CC"};
+                            // Require the theme of our choosing
+                            "dojox/charting/themes/ApimDefault",
+
+                            // Tooltip
+                            "dojox/charting/action2d/Tooltip",
+                            // Require the highlighter
+                            "dojox/charting/action2d/Highlight",
+
+                            //  We want to plot bars
+                            "dojox/charting/plot2d/Bars",
+
+                            //  We want to use Markers
+                            "dojox/charting/plot2d/Markers",
+
+                            //  We'll use default x/y axes
+                            "dojox/charting/axis2d/Default",
+
+                            //mouse zoom and pan
+                            "dojox/charting/action2d/MouseZoomAndPan",
+
+                            // Wait until the DOM is ready
+                            "dojo/domReady!"
+                        ], function (Chart, theme, MouseZoomAndPan, Highlight) {
+
+                            // Create the chart within it's "holding" node
+                            var serviceTimeChart = new Chart("serviceTimeChart");
+
+                            // Set the theme
+                            serviceTimeChart.setTheme(theme);
+
+                            // Add the only/default plot
+                            serviceTimeChart.addPlot("default", {
+                                type: "Bars",
+                                markers: true,
+                                gap: 5,
+                                animate: {duration: 800}
                             });
+
+                            // Add axes
+                            serviceTimeChart.addAxis("x", { title: 'Response Time(ms)',titleOrientation: "away",minorTicks:false, fixLower: "major", fixUpper: "major" });
+                            serviceTimeChart.addAxis("y", {title: 'API',vertical: true,minorTicks:false,majorLabels: true,
+                                labels: dojo.map(defaultFilterValues, function (value, index) {
+
+                                    return {value: index + 1, text: value[0]};
+
+                                })
+                            });
+
+                            // Define the data
+                            var chartData;
+                            var color = -1;
+                            require(["dojo/_base/array"], function (array) {
+                                chartData = array.map(defaultFilterValues, function (d) {
+                                    color++;
+                                    return {y: d[1], text: d[0], tooltip: "<b>" + d[0] + "</b><br /><i>" + d[1] + "ms</i>", fill: "#0099CC"};
+                                });
+                            });
+
+                            // Add the series of data
+                            serviceTimeChart.addSeries("API Service Time", chartData);
+
+                            new MouseZoomAndPan(serviceTimeChart, "default", { axis: "x"});
+
+                            new Highlight(serviceTimeChart, "default");
+
+                            // Render the chart!
+                            serviceTimeChart.render();
+
                         });
 
-                        // Add the series of data
-                        serviceTimeChart.addSeries("API Service Time", chartData);
+                         $('#apiSelectTable').on('change', 'input.inputCheckbox', function () {
 
-                        new MouseZoomAndPan(serviceTimeChart, "default", { axis: "x"});
+                            $('#serviceTimeChart').empty();
+                            var id = $(this).attr('id');
+                            var check = $(this).is(':checked');
+                            var tickValue = $(this).attr('data-item');
+                            var draw_chart = [];
 
-                        new Highlight(serviceTimeChart, "default");
+                            if (check) {
+                                if(($( "input:checked" ).length)>9){
+                                    alert("Please uncheck and then select to display this on graph");
+                                state_array[id] = false;
+                                $(this).prop("checked", "");
+                                }else{
+                                state_array[id] = true;
+                                }
+                            } else {
+                                state_array[id] = false;
+                            }
 
-                        // Render the chart!
-                        serviceTimeChart.render();
 
-                    });
+                            $.each(filterValues, function (index, value) {
+                                if (state_array[index]) {
+                                    draw_chart.push(value);
+                                }
+                            });
+
+                            if (draw_chart.length === 1) {
+                               draw_chart.push(["", 0]);
+                            }
+
+                            var height = 450;
+                            if (30 * length > 450) height = 30 * length;
+                            $('#serviceTimeChart').height(height);
+                            require([
+                                // Require the basic chart class
+                                "dojox/charting/Chart",
+
+                                // Require the theme of our choosing
+                                "dojox/charting/themes/ApimDefault",
+
+                                // Tooltip
+                                "dojox/charting/action2d/Tooltip",
+                                // Require the highlighter
+                                "dojox/charting/action2d/Highlight",
+
+                                //  We want to plot bars
+                                "dojox/charting/plot2d/Bars",
+
+                                //  We want to use Markers
+                                "dojox/charting/plot2d/Markers",
+
+                                //  We'll use default x/y axes
+                                "dojox/charting/axis2d/Default",
+
+                                //mouse zoom and pan
+                                "dojox/charting/action2d/MouseZoomAndPan",
+
+                                // Wait until the DOM is ready
+                                "dojo/domReady!"
+                            ], function (Chart, theme, MouseZoomAndPan, Highlight) {
+
+
+                                // Create the chart within it's "holding" node
+                                var serviceTimeChart = new Chart("serviceTimeChart");
+
+                                // Set the theme
+                                serviceTimeChart.setTheme(theme);
+
+                                // Add the selected plot
+                                serviceTimeChart.addPlot("default", {
+                                    type: "Bars",
+                                    markers: true,
+                                    gap: 5,
+                                    animate: {duration: 800}
+                                });
+
+                                // Add axes
+                                serviceTimeChart.addAxis("x", { title: 'Response Time(ms)',titleOrientation: "away", minorTicks:false,fixLower: "major", fixUpper: "major" });
+                                serviceTimeChart.addAxis("y", {title: 'API',minorTicks:false,vertical: true,
+                                    labels: dojo.map(draw_chart, function (value, index) {
+                                        return {value: index + 1, text: value[0]};
+                                    })
+                                });
+
+                                // Define the data
+                                var chartData;
+                                var color = -1;
+                                require(["dojo/_base/array"], function (array) {
+                                    chartData = array.map(draw_chart, function (d) {
+                                        color++;
+                                        return {y: d[1], text: d[0], tooltip: "<b>" + d[0] + "</b><br /><i>" + d[1] + "s</i>", fill: "#0099CC"};
+                                    });
+                                });
+
+                                // Add the series of data
+                                serviceTimeChart.addSeries("API Service Time", chartData);
+
+                                new MouseZoomAndPan(serviceTimeChart, "default", { axis: "x"});
+
+                                new Highlight(serviceTimeChart, "default");
+
+                                // Render the chart!
+                                serviceTimeChart.render();
+
+                            });
+                         });
 
                 } else {
                     $('#serviceTimeChart').css("fontSize", 14);

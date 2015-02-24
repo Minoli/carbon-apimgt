@@ -28,99 +28,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     var firstAccessDay = new Date(json.usage[0].year, json.usage[0].month - 1, json.usage[0].day);
                     var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());
 
-                    //day picker
-                    $('#today-btn').on('click',function(){
-                        var to = convertTimeString(currentDay);
-                        var from = convertTimeString(currentDay-86400000);
-                        var dateStr= from+" to "+to;
-                        $("#date-range").html(dateStr);
-                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawSubscriberCountByAPIs(from,to);
-
-                    });
-
-                    //hour picker
-                    $('#hour-btn').on('click',function(){
-                        var to = convertTimeString(currentDay);
-                        var from = convertTimeString(currentDay-3600000);
-                        var dateStr= from+" to "+to;
-                        $("#date-range").html(dateStr);
-                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawSubscriberCountByAPIs(from,to);
-                    })
-
-                    //week picker
-                    $('#week-btn').on('click',function(){
-                        var to = convertTimeString(currentDay);
-                        var from = convertTimeString(currentDay-604800000);
-                        var dateStr= from+" to "+to;
-                        $("#date-range").html(dateStr);
-                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawSubscriberCountByAPIs(from,to);
-                    })
-
-                    //month picker
-                    $('#month-btn').on('click',function(){
-
-                        var to = convertTimeString(currentDay);
-                        var from = convertTimeString(currentDay-(604800000*4));
-                        var dateStr= from+" to "+to;
-                        $("#date-range").html(dateStr);
-                        $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawSubscriberCountByAPIs(from,to);
-                    });
-
-                    //date picker
-                    $('#date-range').dateRangePicker(
-                        {
-                            startOfWeek: 'monday',
-                            separator : ' to ',
-                            format: 'YYYY-MM-DD HH:mm',
-                            autoClose: false,
-                            time: {
-                                enabled: true
-                            },
-                            shortcuts:'hide',
-                            endDate:currentDay
-                        })
-                        .bind('datepicker-change',function(event,obj)
-                        {
-
-                        })
-                        .bind('datepicker-apply',function(event,obj)
-                        {
-                             var from = convertDate(obj.date1);
-                             var to = convertDate(obj.date2);
-                             $('#date-range').html(from + " to "+ to);
-                             drawSubscriberCountByAPIs(from,to);
-                        })
-                        .bind('datepicker-close',function()
-                        {
-                    });
-
-                    //setting default date
-                    var to = new Date();
-                    var from = new Date(to.getTime() - 1000 * 60 * 60 * 24 * 30);
-                    $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                    $('#date-range').html($('#date-range').val());
-                    var fromStr = convertDate(from);
-                    var toStr = convertDate(to);
-                    drawSubscriberCountByAPIs(fromStr,toStr);
-
-
-                    $('#date-range').click(function (event) {
-                    event.stopPropagation();
-                    });
-
-                    $('body').on('click', '.btn-group button', function (e) {
-                        $(this).addClass('active');
-                        $(this).siblings().removeClass('active');
-                    });
-
-                    var width = $("#rangeSliderWrapper").width();
-                    $("#rangeSliderWrapper").affix();
-                    $("#rangeSliderWrapper").width(width);
-
+                    drawSubscriberCountByAPIs();
 
                 }
 
@@ -149,9 +57,8 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
 
 });
 
-var drawSubscriberCountByAPIs = function (from, to) {
-    var fromDate = from;
-    var toDate = to;
+var drawSubscriberCountByAPIs = function () {
+
     jagg.post("/site/blocks/stats/api-subscriptions/ajax/stats.jag", { action: "getSubscriberCountByAPIs", currentLocation: currentLocation  },
         function (json) {
             if (!json.error) {
@@ -167,7 +74,7 @@ var drawSubscriberCountByAPIs = function (from, to) {
                      var groupData = [];
 
                      for (var i = 0; i < length; i++) {
-                     console.log(json.usage[i].apiName);
+
                          var apiData= JSON.parse(json.usage[i].apiName);
 
                          apiName_Provider=""+apiData[0]+" ("+apiData[2]+")";
@@ -184,7 +91,7 @@ var drawSubscriberCountByAPIs = function (from, to) {
                      function isExist(array, label){
                          var result = false;
                          for(var i = 0; i < array.length; i++){
-                                 //check with the incomming label and current array label
+                                 //check with the incoming label and current array label
                                  var arrLabel = array[i].apiName_Provider;
                                  if(arrLabel == label){
                                       result = true;
@@ -264,7 +171,6 @@ var drawSubscriberCountByAPIs = function (from, to) {
                             versionCount += grpCount.versions[j].Count;
                         }
 
-                        //dataStructure[0].versions.push({ version: "other", Count:allSubscriptionCount-versionCount},{"version":"1.0.0","Count":2},{"version":"1.2.0","Count":3},{"version":"1.3.0","Count":1},{"version":"1.3.0","Count":2},{"version":"1.2.3","Count":3},{"version":"1.3.3","Count":1},{"version":"2.0.0","Count":2},{"version":"2.2.0","Count":3},{"version":"2.3.0","Count":1});
                         dataStructure[0].versions.push({ version: "other", Count:allSubscriptionCount-versionCount});
                         colorRangeArray.push(chartColorScheme);
 

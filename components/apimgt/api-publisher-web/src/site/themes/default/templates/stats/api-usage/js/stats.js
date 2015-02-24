@@ -29,28 +29,6 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                     var firstAccessDay = new Date(json.usage[0].year, json.usage[0].month-1, json.usage[0].day);
                     var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());
 
-//                    if(firstAccessDay.valueOf() == currentDay.valueOf()){
-//                        currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);
-//                    }
-//                    var rangeSlider =  $("#rangeSlider");
-//                    //console.info(currentDay);
-//                    rangeSlider.dateRangeSlider({
-//                        "bounds":{
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        },
-//                        "defaultValues":{
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        }
-//                    });
-//                    rangeSlider.bind("valuesChanged", function(e, data){
-//                        var from = convertTimeString(data.values.min);
-//                        var to = convertTimeStringPlusDay(data.values.max);
-//
-//                        drawProviderAPIUsage(from,to);
-//
-//                    });
 
                     //day picker
                     $('#today-btn').on('click',function(){
@@ -144,7 +122,7 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
 
 
                     var width = $("#rangeSliderWrapper").width();
-                    $("#rangeSliderWrapper").affix();
+                    //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
 
                 }
@@ -202,7 +180,7 @@ var drawProviderAPIUsage = function(from,to){
                 if (length > 0) {
                     $('#tableContainer').append($dataTable);
                     $('#tableContainer').show();
-                    $('#apiTable').DataTable();
+                    $('#apiTable').DataTable( {"order": [[ 1, "desc" ]]});
 
                     require([
                         // Require the basic chart class

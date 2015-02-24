@@ -36,27 +36,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     var d = new Date();
                     var firstAccessDay = new Date(json.usage[0].year, json.usage[0].month - 1, json.usage[0].day);
                     var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());//                    if (firstAccessDay.valueOf() == currentDay.valueOf()) {
-//                        currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
-//                    }
-//                    var rangeSlider = $("#rangeSlider");
-//                    //console.info(currentDay);
-//                    rangeSlider.dateRangeSlider({
-//                        "bounds": {
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        },
-//                        "defaultValues": {
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        }
-//                    });
-//                    rangeSlider.bind("valuesChanged", function (e, data) {
-//                        var from = convertTimeString(data.values.min);
-//                        var to = convertTimeStringPlusDay(data.values.max);
-//
-//                        drawAPIUsageByResourcePath(from, to);
-//
-//                    });
+
 
                     //day picker
                     $('#today-btn').on('click',function(){
@@ -150,7 +130,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
 
 
                     var width = $("#rangeSliderWrapper").width();
-                    $("#rangeSliderWrapper").affix();
+                    //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
 
                 }
@@ -310,6 +290,7 @@ var drawAPIUsageByResourcePath = function (from, to) {
                 }
 
                   $dataTable.on("click", '.link',function(){
+
                         var answerid = $(this).attr('id');
                         var test= $(this).closest('tr').attr('id');
 
@@ -358,10 +339,16 @@ var drawAPIUsageByResourcePath = function (from, to) {
                                                 });
 
                                                 nv.addGraph(function () {
-                                                    chart = nv.models.lineWithFocusChart();
+                                                    chart = nv.models.lineWithFocusChart().margin({right: 100});
+                                                    chart.margin({left: 100});
+                                                    var fitScreen = false;
+                                                    var width = 600;
+                                                    var height = 300;
                                                     chart.color(d3.scale.category20b().range());
-                                                    chart.yAxis.tickFormat(d3.format(',.2f'));
-                                                    chart.y2Axis.tickFormat(d3.format(',.2f'));
+                                                    chart.xAxis.axisLabel('Time');
+                                                    chart.yAxis.axisLabel('Hits');
+                                                    chart.yAxis.tickFormat(d3.format(',d'));
+                                                    chart.y2Axis.tickFormat(d3.format(',d'));
                                                     chart.xAxis.tickFormat(function (d) {
                                                      if(clicked1){
                                                         return d3.time.format('%d %b %H:%M')(new Date(d))
@@ -376,18 +363,19 @@ var drawAPIUsageByResourcePath = function (from, to) {
                                                     });
                                                     chart.x2Axis.tickFormat(function (d) {
 
-                                                        return d3.time.format('%d %b %Y %H:%M:%S')(new Date(d))
+                                                        return d3.time.format('%d %b %Y %H:%M')(new Date(d))
                                                     });
                                                     chart.tooltipContent(function (key, y, e, graph) {
                                                         var x = d3.time.format('%d %b %Y %H:%M:%S')(new Date(parseInt(graph.point.x)));
                                                         var y = String(graph.point.y);
                                                         if (key == 'Hits') {
-                                                            var y = 'There is ' + String(graph.point.y) + ' calls';
+                                                            var y = 'There is ' + String(graph.point.y) + ' Hit(s)';
                                                         }
 
                                                         tooltip_str = '<center><b>' + key + '</b></center>' + y + ' on ' + x;
                                                         return tooltip_str;
                                                     });
+
 
                                                     d3.select('#lineWithFocusChart svg')
                                                         .datum(data_lineWithFocusChart)
@@ -395,7 +383,10 @@ var drawAPIUsageByResourcePath = function (from, to) {
                                                         .attr('height', 450)
                                                         .call(chart);
 
-                                                    return chart;
+
+
+                                                    nv.utils.windowResize(chart.update);
+                                                return chart;
                                                 });
 
                                                 data_lineWithFocusChart = [{
@@ -411,7 +402,10 @@ var drawAPIUsageByResourcePath = function (from, to) {
                                 }
                             }
                         }
+                    $('#light').css('display','block');
+                    $('#fade').css('display','block');
                 });
+
 
                 if (length == 0) {
                     $('#resourcePathUsageTable').hide();
@@ -481,3 +475,4 @@ function convertDate(date) {
         + month + '-' + (('' + day).length < 2 ? '0' : '') + day +" "+ (('' + hour).length < 2 ? '0' : '')
         + hour +":"+(('' + minute).length < 2 ? '0' : '')+ minute;
 }
+

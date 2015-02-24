@@ -20,7 +20,7 @@
   <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/jqplot/excanvas.min.js"))%>" ></script><![endif]-->
 
 
-<div class="title-section"> <h2><%=i18n.localize("overallAPIUsageTitle")%></h2> </div>
+<div class="title-section"> <h2><%=i18n.localize("apiUsageComparisonTitle")%></h2> </div>
 
 <div class="content-section shadow-up">
 <div class="content-data">
@@ -38,9 +38,10 @@
                     </button>
                     <button id="date-range" type="button" class="btn btn-default date-range last-child"
                             data-toggle="popup" title="Click to set custom date range">
+
                     </button>
                 </div>
-                <span class="add-on-cal"><i style="margin-right:0px;" class="icon-calendar"></i></span>
+                <span class="add-on-cal"><i class="icon-calendar"></i></span>
             </div>
         </div>
         </div>
@@ -51,15 +52,16 @@
 <!--First Section-->
 <div class="well">
     <div class="row-fluid">
-        <div class="span6">
+        <div class="span12">
             <div id="apiChart">
                 <div class="progress progress-striped active">
                     <div class="bar" style="width: 10%;"></div>
                 </div>
             </div>
         </div>
-        <div class="span6">
-             <div id="tableContainer"></div>
+
+        <div class="span11">
+             <div id="tableContainer" style="margin-top:20px"></div>
         </div>
     </div>
 </div>

@@ -32,28 +32,6 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     var firstAccessDay = new Date(json.usage[0].year, json.usage[0].month - 1, json.usage[0].day);
                     var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());
 
-//                    if (firstAccessDay.valueOf() == currentDay.valueOf()) {
-//                        var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());
-//                    }
-//                    var rangeSlider = $("#rangeSlider");
-//                    //console.info(currentDay);
-//                    rangeSlider.dateRangeSlider({
-//                        "bounds": {
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        },
-//                        "defaultValues": {
-//                            min: firstAccessDay,
-//                            max: currentDay
-//                        }
-//                    });
-//                    rangeSlider.bind("valuesChanged", function (e, data) {
-//                        var from = convertTimeString(data.values.min);
-//                        var to = convertTimeStringPlusDay(data.values.max);
-//
-//                        drawProviderAPIVersionUserLastAccess(from, to);
-//
-//                    });
 
                         //day picker
                         $('#today-btn').on('click',function(){
@@ -147,7 +125,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
 
 
                     var width = $("#rangeSliderWrapper").width();
-                    $("#rangeSliderWrapper").affix();
+                    //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
 
                 }
@@ -192,15 +170,15 @@ var drawProviderAPIVersionUserLastAccess = function(from,to){
 
                 $dataTable.append($('<thead class="tableHead"><tr>'+
                                         '<th width="20%">API</th>'+
-                                         '<th width="15%">Version</th>'+
-                                        '<th width="15%">Subscriber</th>'+
-                                        '<th width="30%">Access Time</th>'+
+                                         '<th style="text-align:right;" width="15%">Version</th>'+
+                                        '<th style="text-align:right;" width="15%">Subscriber</th>'+
+                                        '<th style="text-align:right;"  width="30%">Access Time</th>'+
                                     '</tr></thead>'));
 
                 for (var i = 0; i < json.usage.length; i++) {
                     var time=Number(json.usage[i].lastAccess);
                     var date = new Date(time);
-                   $($dataTable).append($('<tr><td>' + json.usage[i].api_name + '</td><td>' + json.usage[i].api_version + '</td><td>' + json.usage[i].user + '</td><td>' + date.toString()+ '</td></tr>'));
+                   $($dataTable).append($('<tr><td>' + json.usage[i].api_name + '</td><td style="text-align:right;">' + json.usage[i].api_version + '</td><td style="text-align:right;">' + json.usage[i].user + '</td><td style="text-align:right;">' + date.toString()+ '</td></tr>'));
                 }
                 if (length == 0) {
                     $('#lastAccessTable').hide();

@@ -55,6 +55,8 @@
                 <div class="bar" style="width: 10%;"></div>
             </div>
     </div>
+    <br>
+        <div id="checkboxContainer"></div>
     </div>
     </div>
 </div>
