@@ -5,11 +5,6 @@
 <script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/easy-pie-chart/jquery.easy-pie-chart.js"))%>"></script>
 <link type="text/css" rel="stylesheet" href="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/easy-pie-chart/jquery.easy-pie-chart.css"))%>"/>
 
-<!-- jqRangeSlider plugin -->
-<script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/jQRangeSlider/lib/jquery-ui-1.8.16.custom.min.js"))%>"></script>
-<script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/jQRangeSlider/jQDateRangeSlider-min.js"))%>"></script>
-<link type="text/css" rel="stylesheet" href="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/jQRangeSlider/css/iThing.css"))%>"/>
-
 <!--datepicker-->
 <script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/datepicker/js/moment.js"))%>"></script>
 <script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/datepicker/js/jquery.daterangepicker.js"))%>"></script>
@@ -30,14 +25,14 @@
             <div id="dateRangePickerContainer">
                 <div class="btn-group" role="group">
                     <button id="hour-btn" type="button" class="btn btn-default date-range">Hour</button>
-                    <button id="today-btn" type="button" class="btn btn-default date-range">Today
+                    <button id="today-btn" type="button" class="btn btn-default date-range">Day
                     </button>
                     <button id="week-btn" type="button" class="btn btn-default date-range">Week</button>
                     <button id="month-btn" type="button" class="btn btn-default date-range active">
                         Month
                     </button>
                     <button id="date-range" type="button" class="btn btn-default date-range last-child"
-                            data-toggle="popup" title="Click to set custom date range">
+                            data-toggle="popup" title="Click to set custom date range">.
 
                     </button>
                 </div>
@@ -52,22 +47,26 @@
 <!--First Section-->
 <div class="well">
     <div class="row-fluid">
-        <div class="span12">
+     <div class="span12">
+        <div class="span3"></div>
+        <div class="span6 ">
             <div id="apiChart">
                 <div class="progress progress-striped active">
                     <div class="bar" style="width: 10%;"></div>
                 </div>
             </div>
         </div>
+        <div class="span3"></div>
 
-        <div class="span11">
-             <div id="tableContainer" style="margin-top:20px"></div>
-        </div>
+
+     </div>
+
+      <div class="span11">
+              <div id="tableContainer" style="margin-top:20px"></div>
+      </div>
+
     </div>
 </div>
-
-
-
 
 </div>
 </div>

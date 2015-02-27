@@ -119,7 +119,6 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                         $(this).siblings().removeClass('active');
                     });
 
-
                     var width = $("#rangeSliderWrapper").width();
                     //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
@@ -136,7 +135,6 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                     $('#middle').append($('<div class="errorWrapper"><span class="label top-level-warning"><i class="icon-warning-sign icon-white"></i>'
                         +i18n.t('errorMsgs.checkBAMConnectivity')+'</span><br/><img src="../themes/default/templates/stats/api-usage-destination/images/statsThumb.png" alt="Smiley face"></div>'));
                 }
-
 
             }
             else {
@@ -155,6 +153,7 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
 var drawAPIUsageByDestination = function(from,to){
     var fromDate = from;
     var toDate = to;
+
     jagg.post("/site/blocks/stats/api-usage-destination/ajax/stats.jag", { action:"getAPIUsageByDestination", currentLocation:currentLocation,fromDate:fromDate,toDate:toDate},
         function (json) {
             if (!json.error) {
@@ -163,7 +162,7 @@ var drawAPIUsageByDestination = function(from,to){
                 $('#tempLoadingSpaceDestination').empty();
                 $('div#destinationBasedUsageTable_wrapper.dataTables_wrapper.no-footer').remove();
 
-                var $dataTable =$('<table class="display" width="100%" cellspacing="0" id="destinationBasedUsageTable"></table>');
+                var $dataTable =$('<table class="display defaultTable" width="100%" cellspacing="0" id="destinationBasedUsageTable"></table>');
 
                 $dataTable.append($('<thead class="tableHead"><tr>'+
                                         '<th>API</th>'+
@@ -184,7 +183,10 @@ var drawAPIUsageByDestination = function(from,to){
                 }else{
                     $('#tableContainer').append($dataTable);
                     $('#tableContainer').show();
-                    $('#destinationBasedUsageTable').DataTable();
+                    $('#destinationBasedUsageTable').DataTable({
+                     "order": [[ 4, "desc" ]]
+                    });
+                    $('select').css('width','60px');
                 }
 
             } else {

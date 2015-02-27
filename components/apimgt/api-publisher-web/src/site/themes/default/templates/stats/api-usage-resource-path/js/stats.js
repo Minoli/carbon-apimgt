@@ -14,10 +14,11 @@ var chartColorScheme3 = ["#0099CC", "#436EEE", "#82CFFD", "#33A1C9", "#8DB6CD", 
 currentLocation = window.location.pathname;
 var statsEnabled = isDataPublishingEnabled();
 
-var clicked1=false;
-var clicked2=false;
-var clicked3=false;
-var clicked4=false;
+var isToday=false;
+var isMonth=false;
+var isHour=false;
+var isDefault=false;
+var isWeek=false;
 
 require(["dojo/dom", "dojo/domReady!"], function (dom) {
     currentLocation = window.location.pathname;
@@ -46,6 +47,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
                         drawAPIUsageByResourcePath(from,to);
+                        isToday=true;
 
                     });
 
@@ -57,6 +59,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
                         drawAPIUsageByResourcePath(from,to);
+                        isHour=true;
                     })
 
                     //week picker
@@ -67,17 +70,18 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
                         drawAPIUsageByResourcePath(from,to);
+                        isWeek=true;
                     })
 
                     //month picker
                     $('#month-btn').on('click',function(){
-
                         var to = convertTimeString(currentDay);
                         var from = convertTimeString(currentDay-(604800000*4));
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
                         drawAPIUsageByResourcePath(from,to);
+                        isMonth=true;
                     });
 
                     //date picker
@@ -103,6 +107,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                              var to = convertDate(obj.date2);
                              $('#date-range').html(from + " to "+ to);
                              drawAPIUsageByResourcePath(from,to);
+                             isDefault=true;
                         })
                         .bind('datepicker-close',function()
                         {
@@ -117,6 +122,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     var fromStr = convertDate(from);
                     var toStr = convertDate(to);
                     drawAPIUsageByResourcePath(fromStr,toStr);
+                    isDefault=true;
 
 
                     $('#date-range').click(function (event) {
@@ -174,7 +180,7 @@ var drawAPIUsageByResourcePath = function (from, to) {
 
                 $('div#resourcePathUsageTable_wrapper.dataTables_wrapper.no-footer').remove();
                 var chart;
-                var $dataTable =$('<table class="table tablesorter graphTable" id="resourcePathUsageTable"></table>');
+                var $dataTable =$('<table class="table tablesorter defaultTable" id="resourcePathUsageTable"></table>');
 
                 $dataTable.append($('<thead class="tableHead"><tr>'+
                                         '<th id="api">api</th>'+
@@ -245,7 +251,6 @@ var drawAPIUsageByResourcePath = function (from, to) {
                      }
                 var parsedResponse=webapps;
 
-
                 var data=[];
                 function dateToUnix(year, month, day, hour, minute, second) {
                     return ((new Date(year, month - 1, day, hour, minute, second)).getTime() );
@@ -268,7 +273,6 @@ var drawAPIUsageByResourcePath = function (from, to) {
                     for ( var j = 0; j < parsedResponse[i][1].length; j++) {
                         numberOfContext = parsedResponse[i][1][j][1].length;
                         version = parsedResponse[i][1][j][0]
-                        //alert("version "+version);
 
                         for ( var k = 0; k < numberOfContext; k++) {
 
@@ -334,36 +338,52 @@ var drawAPIUsageByResourcePath = function (from, to) {
                                                 }
 
                                                 dataTest.sort(function(obj1, obj2) {
-
-                                                return obj1.x - obj2.x;
+                                                    return obj1.x - obj2.x;
                                                 });
 
+
                                                 nv.addGraph(function () {
-                                                    chart = nv.models.lineWithFocusChart().margin({right: 100});
-                                                    chart.margin({left: 100});
+                                                    chart = nv.models.lineWithFocusChart().margin({right: 100,top: 100,left: 100});
                                                     var fitScreen = false;
-                                                    var width = 600;
-                                                    var height = 300;
+
                                                     chart.color(d3.scale.category20b().range());
                                                     chart.xAxis.axisLabel('Time');
                                                     chart.yAxis.axisLabel('Hits');
                                                     chart.yAxis.tickFormat(d3.format(',d'));
                                                     chart.y2Axis.tickFormat(d3.format(',d'));
+
                                                     chart.xAxis.tickFormat(function (d) {
-                                                     if(clicked1){
+                                                    if(isToday){
                                                         return d3.time.format('%d %b %H:%M')(new Date(d))
-                                                    }else if(clicked2){
-                                                        return d3.time.format('%H:%M:%S')(new Date(d))
-                                                    }else if(clicked3){
+                                                    }else if(isHour){
+                                                        return d3.time.format('%H:%M')(new Date(d))
+                                                    }else if(isWeek){
+                                                        return d3.time.format('%d %b')(new Date(d))
+
+                                                    }else if(isDefault){
+                                                        return d3.time.format('%d %b %Y')(new Date(d))
+
+                                                    }else{
                                                         return d3.time.format('%d %b %Y %H:%M')(new Date(d))
+
+                                                    }
+
+                                                    });
+
+                                                    chart.x2Axis.tickFormat(function (d) {
+                                                    if(isToday){
+                                                        return d3.time.format('%d %b %H:%M')(new Date(d))
+                                                    }else if(isHour){
+                                                        return d3.time.format('%H:%M')(new Date(d))
+                                                    }else if(isWeek){
+                                                        return d3.time.format('%d %b')(new Date(d))
+
+                                                    }else if(isDefault){
+                                                        return d3.time.format('%d %b %Y')(new Date(d))
                                                     }else{
                                                         return d3.time.format('%d %b %Y %H:%M')(new Date(d))
                                                     }
 
-                                                    });
-                                                    chart.x2Axis.tickFormat(function (d) {
-
-                                                        return d3.time.format('%d %b %Y %H:%M')(new Date(d))
                                                     });
                                                     chart.tooltipContent(function (key, y, e, graph) {
                                                         var x = d3.time.format('%d %b %Y %H:%M:%S')(new Date(parseInt(graph.point.x)));
@@ -376,14 +396,15 @@ var drawAPIUsageByResourcePath = function (from, to) {
                                                         return tooltip_str;
                                                     });
 
+                                                var dataLength=0;
+                                                dataLength=dataTest.length-1;
+                                                chart.brushExtent([dataTest[0].x,dataTest[dataLength].x]);
 
                                                     d3.select('#lineWithFocusChart svg')
                                                         .datum(data_lineWithFocusChart)
                                                         .transition().duration(500)
                                                         .attr('height', 450)
                                                         .call(chart);
-
-
 
                                                     nv.utils.windowResize(chart.update);
                                                 return chart;
@@ -395,7 +416,6 @@ var drawAPIUsageByResourcePath = function (from, to) {
                                                     'yAxis': '1'
 
                                                     }];
-
                                             }
                                         }
                                     }
@@ -406,7 +426,6 @@ var drawAPIUsageByResourcePath = function (from, to) {
                     $('#fade').css('display','block');
                 });
 
-
                 if (length == 0) {
                     $('#resourcePathUsageTable').hide();
                     $('#tempLoadingSpaceResourcePath').html('');
@@ -416,7 +435,12 @@ var drawAPIUsageByResourcePath = function (from, to) {
                     $('#tableContainer').append($dataTable);
                     $('#chartContainer').append($('<div id="lineWithFocusChart"><svg style="height:450px;"></svg></div>'));
                     $('#tableContainer').show();
-                    $('#resourcePathUsageTable').DataTable();
+                    $('#resourcePathUsageTable').DataTable({
+                         "order": [
+                            [ 4, "desc" ]
+                        ]
+                    });
+                    $('select').css('width','60px');
                 }
 
             } else {

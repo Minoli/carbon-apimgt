@@ -120,7 +120,6 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                         $(this).siblings().removeClass('active');
                     });
 
-
                     var width = $("#rangeSliderWrapper").width();
                     //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
@@ -137,8 +136,6 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                     $('#middle').append($('<div class="errorWrapper"><span class="label top-level-warning"><i class="icon-warning-sign icon-white"></i>'
                         +i18n.t('errorMsgs.checkBAMConnectivity')+'</span><br/><img src="../themes/default/templates/stats/api-usage/images/statsThumb.png" alt="Smiley face"></div>'));
                 }
-
-
             }
             else {
                 if (json.message == "AuthenticateError") {
@@ -160,16 +157,15 @@ var drawProviderAPIUsage = function(from,to){
         function (json) {
             if (!json.error) {
 
-
-                    var length = json.usage.length,data = [];
-
+                var length = json.usage.length,data = [];
                 $('#apiChart').empty();
                 $('div#apiTable_wrapper.dataTables_wrapper.no-footer').remove();
-                var $dataTable =$('<table class="display" width="100%" cellspacing="0" id="apiTable"></table>');
+
+                var $dataTable =$('<table class="defaultTable display" width="100%" cellspacing="0" id="apiTable"></table>');
 
                 $dataTable.append($('<thead class="tableHead"><tr>'+
                                         '<th>API</th>'+
-                                        '<th>Hits</th>'+
+                                        '<th style="text-align:right">Hits</th>'+
                                     '</tr></thead>'));
                 for (var i = 0; i < length; i++) {
                     data[i] = [json.usage[i].apiName, parseInt(json.usage[i].count)];
@@ -178,9 +174,7 @@ var drawProviderAPIUsage = function(from,to){
                 }
 
                 if (length > 0) {
-                    $('#tableContainer').append($dataTable);
-                    $('#tableContainer').show();
-                    $('#apiTable').DataTable( {"order": [[ 1, "desc" ]]});
+
 
                     require([
                         // Require the basic chart class
@@ -204,8 +198,6 @@ var drawProviderAPIUsage = function(from,to){
                         //  We'll use default x/y axes
                         "dojox/charting/axis2d/Default"
                     ], function(Chart, theme, Pie, Tooltip, MoveSlice) {
-
-
 
                         // Create the chart within it's "holding" node
                         var apiUsageChart = new Chart("apiChart");
@@ -236,7 +228,6 @@ var drawProviderAPIUsage = function(from,to){
 
                         apiUsageChart.addSeries("API Usage",chartData);
 
-
                         // Create the tooltip
                         var tip = new Tooltip(apiUsageChart,"default");
 
@@ -247,13 +238,16 @@ var drawProviderAPIUsage = function(from,to){
                         apiUsageChart.render();
 
                     });
+                    $('#tableContainer').append($dataTable);
+                    $('#tableContainer').show();
+                    $('#apiTable').DataTable( {"order": [[ 1, "desc" ]]});
+                    $('select').css('width','60px');
 
                 } else {
                     $('#apiTable').hide();
                     $('#apiChart').css("fontSize", 14);
                     $('#apiChart').append($('<span class="label label-info">'+i18n.t('errorMsgs.noData')+'</span>'));
                 }
-
 
             } else {
                 if (json.message == "AuthenticateError") {

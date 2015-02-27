@@ -40,7 +40,8 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIUsageByUser(from,to);
+
+                        drawAPIUsage(from,to);
 
                     });
 
@@ -51,7 +52,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIUsageByUser(from,to);
+                        drawAPIUsage(from,to);
                     })
 
                     //week picker
@@ -61,7 +62,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIUsageByUser(from,to);
+                        drawAPIUsage(from,to);
                     })
 
                     //month picker
@@ -72,7 +73,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIUsageByUser(from,to);
+                        drawAPIUsage(from,to);
                     });
 
                     //date picker
@@ -97,7 +98,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                              var from = convertDate(obj.date1);
                              var to = convertDate(obj.date2);
                              $('#date-range').html(from + " to "+ to);
-                             drawAPIUsageByUser(from,to);
+                             drawAPIUsage(from,to);
                         })
                         .bind('datepicker-close',function()
                         {
@@ -111,7 +112,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     $('#date-range').html($('#date-range').val());
                     var fromStr = convertDate(from);
                     var toStr = convertDate(to);
-                    drawAPIUsageByUser(fromStr,toStr);
+                    drawAPIUsage(fromStr,toStr);
 
 
                     $('#date-range').click(function (event) {
@@ -152,14 +153,137 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
 
 });
 
-var drawAPIUsageByUser = function (from, to) {
+var subscriberDetails=[];
+var drawAPIUsage = function (from,to) {
+
     var fromDate = from;
     var toDate = to;
+    jagg.post("/site/blocks/stats/api-subscriptions/ajax/stats.jag", { action: "getSubscriberCountByAPIs", currentLocation: currentLocation  },
+                function (json) {
+                    if (!json.error) {
+                        var length = json.usage.length, data = [];
+                        var newLength=0;
+                        subscriberDetails=[];
+                        var inputData=[];
+
+                        if (length > 0) {
+                            $('#pie-chart').empty();
+
+                             var inputDataStr="";
+                             var apiData="";
+                             var apiName_Provider="";
+                             var groupData = [];
+
+                             for (var i = 0; i < length; i++) {
+
+                                 var apiData= JSON.parse(json.usage[i].apiName);
+
+                                 apiName_Provider=""+apiData[0]+" ("+apiData[2]+")";
+                                 inputData.push({
+                                          "apiName_Provider":apiName_Provider,
+                                          "api_name":apiData[0],
+                                          "versions":apiData[1],
+                                          "subscriberCount":json.usage[i].count,
+                                          "provider":apiData[2]
+                                 });
+                             }
+
+                             //check the existence of the array
+                             function isExist(array, label){
+                                 var result = false;
+                                 for(var i = 0; i < array.length; i++){
+                                         //check with the incoming label and current array label
+                                         var arrLabel = array[i].apiName_Provider;
+                                         if(arrLabel == label){
+                                              result = true;
+                                              break;
+                                         }
+                                 }
+                                 return result;
+                             }
+
+                             var apiName;
+                             var version;
+                             var api_name;
+                             var provider;
+
+                             inputData.map(function(data){
+                                  //filter apiName and version
+                                  apiName = data.apiName_Provider;
+                                  version = { version :  data.versions, Count : data.subscriberCount};
+                                  api_name=data.api_name;
+                                  provider=data.provider;
+
+                                 if(!isExist(groupData, apiName)){
+                                    //create new object to push data
+                                    var versionObj = {};
+                                    versionObj.apiName_Provider = apiName;
+                                    versionObj.api_name=api_name;
+                                    versionObj.provider=provider;
+                                    //versions array
+                                    versionObj.versions = [];
+                                    versionObj.versions.push(version);
+                                    groupData.push(versionObj);
+
+                                 }
+                                 else{
+                                    //push new version to existing object
+                                    for(var i = 0; i < groupData.length; i++){
+                                        if(groupData[i].apiName_Provider == apiName){
+                                            groupData[i].versions.push(version);
+                                            break;
+                                        }
+                                    }
+                                 }
+                             });
+
+                             var allSubscriptionCount = 0;
+                             for (var i = 0; i < length; i++) {
+                                  allSubscriptionCount += json.usage[i].count;
+                             }
+
+                             var versionCount;
+                             for (var i = 0; i < groupData.length; i++) {
+                                 var dataStructure=[];
+                                 dataStructure.push(groupData[i]);
+
+                                 var grpCount=groupData[i];
+                                 versionCount=0;
+                                 var name;
+                                 for(var j = 0; j < groupData[i].versions.length; j++){
+                                     versionCount += grpCount.versions[j].Count;
+                                 }
+                                 subscriberDetails.push({
+                                  "api_name":groupData[i].api_name,
+                                  "sub_count":versionCount,
+                                  "check":false
+                                  });
+                                 }
+                                 drawChart(from,to);
+                        }
+                    }
+                    else {
+                                if (json.message == "AuthenticateError") {
+                                    jagg.showLogin();
+                                } else {
+                                    jagg.message({content: json.message, type: "error"});
+                                }
+                            }
+                    }, "json");
+
+}
+
+
+var drawChart = function (from, to) {
+    var fromDate = from;
+    var toDate = to;
+
     jagg.post("/site/blocks/stats/api-usage-user/ajax/stats.jag", { action: "getAPIUsageByUser", currentLocation: currentLocation, fromDate: fromDate, toDate: toDate},
         function (json) {
             if (!json.error) {
                 $('#tooltipTable').find("tr:gt(0)").remove();
                 var length = json.usage.length;
+
                 $('#tempLoadingSpaceUsageByUser').empty();
                 $('#chartContainer').empty();
                 $('div#apiSelectTable_wrapper.dataTables_wrapper.no-footer').remove();
@@ -240,32 +364,51 @@ var drawAPIUsageByUser = function (from, to) {
                     }
 
                     var parsedResponse = JSON.parse(JSON.stringify(webapps));
-
                     var data=[];
                         for ( var i = 0; i < parsedResponse.length; i++) {
-                            var count = 0;
-                            var app ='';
-
+                        var count = 0;
+                        var app =(parsedResponse[i][0].replace(/\s+/g, ''));
+                        var maximumUsers = 0;
+                        var allSubCount =0;
+                        var allcount = 0;
                             for ( var j = 0; j < parsedResponse[i][1].length; j++) {
-                                app =(parsedResponse[i][0].replace(/\s+/g, ''));
 
-                                var maximumUsers = 0;
-                                maximumUsers=parsedResponse[i][1][j][1].length;
-                                var allcount = 0;
-                                    for ( var k = 0; k < maximumUsers; k++) {
-                                        count++;
-                                        allcount = Number(allcount)+Number(parsedResponse[i][1][j][1][k][1]);
+                        allSubCount = allSubCount+parsedResponse[i][1][j][1].length
 
-                                    }
+                        maximumUsers=parsedResponse[i][1][j][1].length;
 
-                                    data.push({
-                                                    API_name:app,
-                                                    Subscriber_Count:maximumUsers,
-                                                    Hits:allcount,
-                                                    API:app
-                                                });
+                            for ( var k = 0; k < maximumUsers; k++) {
+                                count++;
+                                allcount = Number(allcount)+Number(parsedResponse[i][1][j][1][k][1]);
+
                             }
+
+                            }
+
+                            for(var z =0;z<subscriberDetails.length;z++){
+                                if(app == subscriberDetails[z].api_name){
+                                    allSubCount = subscriberDetails[z].sub_count;
+                                    subscriberDetails[z].check=true;
+                                    data.push({
+                                        API_name:app,
+                                        Subscriber_Count:allSubCount,
+                                        Hits:allcount,
+                                        API:app
+                                    });
+                                }
+                            }
+
                             userParsedResponse = parsedResponse;
+                        }
+                        for(var z =0;z<subscriberDetails.length;z++){
+                            if(subscriberDetails[z].check == false){
+                                data.push({
+                                            API_name:subscriberDetails[z].api_name,
+                                            Subscriber_Count:subscriberDetails[z].sub_count,
+                                            Hits:0,
+                                            API:subscriberDetails[z].api_name
+                                });
+                            }
                         }
 
                     var chart;
@@ -282,8 +425,6 @@ var drawAPIUsageByUser = function (from, to) {
                     chart.addMeasureAxis("z", "Hits");
                     s=chart.addSeries("API", dimple.plot.bubble);
 
-
-
                     var div = d3.select("body").append("div").attr("class", "toolTip");
                     var filterValues = dimple.getUniqueValues(data, "API");
                     var state_array = [];
@@ -291,12 +432,12 @@ var drawAPIUsageByUser = function (from, to) {
                     var sortData=[];
                     var chartData=[];
 
-                    var $dataTable =$('<table class="display" width="100%" cellspacing="0" id="apiSelectTable"></table>');
+                    var $dataTable =$('<table class="display defaultTable" width="100%" cellspacing="0" id="apiSelectTable"></table>');
 
                     $dataTable.append($('<thead class="tableHead"><tr>'+
                                             '<th width="10%"></th>'+
                                             '<th>API</th>'+
-                                            '<th>Subscriber Count</th>'+
+                                            '<th width="30%" >Subscriber Count</th>'+
                                         '</tr></thead>'));
 
                     sortData = dimple.filterData(data, "API", filterValues);
@@ -334,27 +475,32 @@ var drawAPIUsageByUser = function (from, to) {
                         { "bSortable": false },
                         null,
                         null
-
                         ],
                     });
+                    $('select').css('width','60px');
                     chart.data = dimple.filterData(data, "API", defaultFilterValues);
 
+                    var count=20;
                     $('#apiSelectTable').on( 'change', 'input.inputCheckbox', function () {
                           var id =  $(this).attr('id');
                           var check=$(this).is(':checked');
                           var draw_chart=[];
 
                           if (check) {
-                          alert($( "input:checked" ).length)
-                            if(($( "input:checked" ).length)>20){
-                                alert("Please uncheck and then select to display this on graph");
+                          $('#displayMsg').html('');
+                          count++;
+                            if(count>20){
+                                $('#displayMsg').html('<h5 style="color:#555" >Please Note that the graph will be showing only 20 entries</h5>');
                                 state_array[id] = false;
                                 $(this).prop("checked", "");
+                                count--;
                               }else{
                                 state_array[id] = true;
                               }
                           } else {
+                                $('#displayMsg').html('');
                                 state_array[id] = false;
+                                count--;
                           }
 
                           $.each(chartData, function (index, value) {
@@ -404,9 +550,7 @@ var drawAPIUsageByUser = function (from, to) {
                                     for (var l=0;l<versionCount.length;l++){
                                         var versionName=versionCount[l].version;
                                         var version_Count=versionCount[l].count;
-
                                         $('#tooltipTable tbody').append('<tr><td>'+versionName+'</td><td>'+version_Count+'</td></tr>');
-
                                     }
                                 }
                             }
@@ -431,7 +575,6 @@ var drawAPIUsageByUser = function (from, to) {
             }
             t_on['tempLoadingSpaceUsageByUser'] = 0;
         }, "json");
-
 }
 
 function isDataPublishingEnabled(){

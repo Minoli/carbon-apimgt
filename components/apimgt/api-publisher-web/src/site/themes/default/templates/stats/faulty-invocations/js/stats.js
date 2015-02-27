@@ -36,8 +36,8 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIResponseFaultCountTable(from,to);
                         drawAPIResponseFaultCountChart(from,to);
+
 
                     });
 
@@ -48,8 +48,8 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIResponseFaultCountTable(from,to);
                         drawAPIResponseFaultCountChart(from,to);
+
                     })
 
                     //week picker
@@ -59,8 +59,8 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIResponseFaultCountTable(from,to);
                         drawAPIResponseFaultCountChart(from,to);
+
                     })
 
                     //month picker
@@ -71,8 +71,8 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                         var dateStr= from+" to "+to;
                         $("#date-range").html(dateStr);
                         $('#date-range').data('dateRangePicker').setDateRange(from,to);
-                        drawAPIResponseFaultCountTable(from,to);
                         drawAPIResponseFaultCountChart(from,to);
+
                     });
 
                     //date picker
@@ -97,8 +97,8 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                              var from = convertDate(obj.date1);
                              var to = convertDate(obj.date2);
                              $('#date-range').html(from + " to "+ to);
-                             drawAPIResponseFaultCountTable(from,to);
                              drawAPIResponseFaultCountChart(from,to);
+
                         })
                         .bind('datepicker-close',function()
                         {
@@ -112,8 +112,9 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                     $('#date-range').html($('#date-range').val());
                     var fromStr = convertDate(from);
                     var toStr = convertDate(to);
-                    drawAPIResponseFaultCountTable(fromStr,toStr);
                     drawAPIResponseFaultCountChart(fromStr,toStr);
+
+
 
 
                     $('#date-range').click(function (event) {
@@ -124,7 +125,6 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                         $(this).addClass('active');
                         $(this).siblings().removeClass('active');
                     });
-
 
                     var width = $("#rangeSliderWrapper").width();
                     //$("#rangeSliderWrapper").affix();
@@ -142,8 +142,6 @@ require(["dojo/dom", "dojo/domReady!"], function(dom){
                     $('#middle').append($('<div class="errorWrapper"><span class="label top-level-warning"><i class="icon-warning-sign icon-white"></i>'
                         +i18n.t('errorMsgs.checkBAMConnectivity')+'</span><br/><img src="../themes/default/templates/stats/faulty-invocations/images/statsThumb.png" alt="Smiley face"></div>'));
                 }
-
-
             }
             else {
                 if (json.message == "AuthenticateError") {
@@ -165,9 +163,24 @@ var drawAPIResponseFaultCountTable = function(from,to){
             if (!json.error) {
                 $('#apiFaultyTable').find("tr:gt(0)").remove();
                 var length = json.usage.length;
-                $('#apiFaultyTable').show();
+                $('#tempLoadingAPIFaulty').empty();
+                $('#tableContainer').empty();
+
+                $('#chartContainer').empty();
+
+                $('div#apiFaultyTable_wrapper.dataTables_wrapper.no-footer').remove();
+                var chart;
+                var $dataTable =$('<table class="table defaultTable" id="apiFaultyTable"></table>');
+
+                $dataTable.append($('<thead class="tableHead"><tr>'+
+                                        '<th>api</th>'+
+                                        '<th>version</th>'+
+                                        '<th>count</th>'+
+                                        '<th>percentage</th>'+
+                                    '</tr></thead>'));
+
                 for (var i = 0; i < json.usage.length; i++) {
-                    $('#apiFaultyTable').append($('<tr><td>' + json.usage[i].apiName + '</td><td>' + json.usage[i].version + '</td><td>' + json.usage[i].count + '</td><td><span class="pull-right">' + json.usage[i].faultPercentage +'%</span></td></tr>'));
+                    $dataTable.append($('<tr><td>' + json.usage[i].apiName + '</td><td>' + json.usage[i].version + '</td><td>' + json.usage[i].count + '</td><td><span class="pull-right">' + json.usage[i].faultPercentage +'%</span></td></tr>'));
                 }
                 if (length == 0) {
                     $('#apiFaultyTable').hide();
@@ -176,6 +189,15 @@ var drawAPIResponseFaultCountTable = function(from,to){
 
                 }else{
                     $('#tempLoadingAPIFaulty').hide();
+                    $('#tableContainer').append($dataTable);
+                    $('#tableContainer').show();
+                    $('#apiFaultyTable').DataTable({
+                         "order": [
+                            [ 3, "desc" ]
+                        ]
+                    });
+                    $('select').css('width','60px');
+
                 }
 
             } else {
@@ -238,9 +260,6 @@ var drawAPIResponseFaultCountChart = function(from,to){
                         "dojo/domReady!"
                     ], function(Chart, theme,MouseZoomAndPan,Highlight) {
 
-
-
-
                         // Create the chart within it's "holding" node
                         var faultyCountChart = new Chart("faultyCountChart");
 
@@ -252,15 +271,15 @@ var drawAPIResponseFaultCountChart = function(from,to){
                             type: "Columns",
                             markers: true,
                             gap: 5,
-                            animate:{duration:1000}
+                            animate:{duration:600}
                         });
 
                         // Add axes
-                        faultyCountChart.addAxis("x", { labels:dojo.map(data, function(value, index){
+                        faultyCountChart.addAxis("x", { title: 'API',titleOrientation: "away",minorTicks:false,labels:dojo.map(data, function(value, index){
                             return {value: index + 1, text: value[0]};
                         })
                         });
-                        faultyCountChart.addAxis("y",{vertical:true,fixLower: "major", fixUpper: "major"});
+                        faultyCountChart.addAxis("y",{vertical:true,fixLower: "major", fixUpper: "major",minorTicks:false,title: 'Count'});
 
                         // Define the data
                         var chartData; var color = -1;
@@ -282,12 +301,12 @@ var drawAPIResponseFaultCountChart = function(from,to){
                         faultyCountChart.render();
 
                     });
+                    drawAPIResponseFaultCountTable(fromDate,toDate);
 
                 } else {
                     $('#faultyCountChart').css("fontSize", 14);
                     $('#faultyCountChart').append($('<span class="label label-info">'+i18n.t('errorMsgs.noData')+'</span>'));
                 }
-
 
             } else {
                 if (json.message == "AuthenticateError") {

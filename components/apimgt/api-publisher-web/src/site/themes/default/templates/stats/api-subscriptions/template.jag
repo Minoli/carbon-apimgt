@@ -1,11 +1,6 @@
 <% jagg.template("stats/api-subscriptions", function(inputs, outputs, jagg) { %>
 <link type="text/css" rel="stylesheet" href="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/dojo-release-1.8.3/dijit/themes/claro/claro.css"))%>"  media="screen"/>
 
-<!-- jqRangeSlider plugin -->
-<script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/jQRangeSlider/lib/jquery-ui-1.8.16.custom.min.js"))%>"></script>
-<script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/jQRangeSlider/jQDateRangeSlider-min.js"))%>"></script>
-<link type="text/css" rel="stylesheet" href="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/jQRangeSlider/css/iThing.css"))%>"/>
-
 <!-- donut chart plugin-->
 <script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/donut-chart/d3.v3.min.js"))%>"></script>
 <script type="text/javascript" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/utils/donut-chart/jquery-ui.js"))%>"></script>
@@ -29,7 +24,6 @@
 
 <div class="title-section"> <h2><%=i18n.localize("overallAPISubscriptionsTitle")%></h2> </div>
 
-
 <div class="content-section shadow-up">
 <div class="content-data">
 
@@ -47,7 +41,6 @@
 
 </div>
 </div>
-
 
 <% }); %>
 

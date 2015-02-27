@@ -123,11 +123,9 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                             $(this).siblings().removeClass('active');
                         });
 
-
                     var width = $("#rangeSliderWrapper").width();
                     //$("#rangeSliderWrapper").affix();
                     $("#rangeSliderWrapper").width(width);
-
                 }
 
                 else if (json.usage && json.usage.length == 0 && statsEnabled) {
@@ -140,8 +138,6 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     $('#middle').append($('<div class="errorWrapper"><span class="label top-level-warning"><i class="icon-warning-sign icon-white"></i>'
                         + i18n.t('errorMsgs.checkBAMConnectivity') + '</span><br/><img src="../themes/default/templates/stats/api-last-access-times/images/statsThumb.png" alt="Smiley face"></div>'));
                 }
-
-
             }
             else {
                 if (json.message == "AuthenticateError") {
@@ -166,19 +162,39 @@ var drawProviderAPIVersionUserLastAccess = function(from,to){
                 $('#tempLoadingSpace').empty();
                 $('div#lastAccessTable_wrapper.dataTables_wrapper.no-footer').remove();
 
-                var $dataTable =$('<table class="display" width="100%" cellspacing="0" id="lastAccessTable"></table>');
+                var $dataTable =$('<table class="display defaultTable" width="100%" cellspacing="0" id="lastAccessTable"></table>');
+
+                //getting timezone value
+                var date=new Date();
+                var offset = date.getTimezoneOffset();
+
+                function convertToHHMM(info) {
+                   var hrs = parseInt(Number(info));
+                   var min = Math.round((Number(info)-hrs) * 60);
+                   return (('' + hrs).length < 2 ? '0' : '') + hrs+':'+(('' + min).length < 2 ? '0' : '')+min;
+                }
+
+                var timezone;
+                if(offset>=(-840) && offset<=720){
+                     if(offset==0 || offset<0){
+                        timezone=" (GMT+"+convertToHHMM(Math.abs(offset)/60)+")";
+                     }
+                     else{
+                        timezone=" (GMT-"+ convertToHHMM(Math.abs(offset)/60)+")";
+                     }
+                }else{
+                   timezone=" ";
+                }
 
                 $dataTable.append($('<thead class="tableHead"><tr>'+
                                         '<th width="20%">API</th>'+
-                                         '<th style="text-align:right;" width="15%">Version</th>'+
-                                        '<th style="text-align:right;" width="15%">Subscriber</th>'+
-                                        '<th style="text-align:right;"  width="30%">Access Time</th>'+
+                                         '<th  width="15%">Version</th>'+
+                                        '<th  width="15%">Subscriber</th>'+
+                                        '<th   width="30%">Access Time'+ timezone+'</th>'+
                                     '</tr></thead>'));
 
                 for (var i = 0; i < json.usage.length; i++) {
-                    var time=Number(json.usage[i].lastAccess);
-                    var date = new Date(time);
-                   $($dataTable).append($('<tr><td>' + json.usage[i].api_name + '</td><td style="text-align:right;">' + json.usage[i].api_version + '</td><td style="text-align:right;">' + json.usage[i].user + '</td><td style="text-align:right;">' + date.toString()+ '</td></tr>'));
+                   $($dataTable).append($('<tr><td>' + json.usage[i].api_name + '</td><td>' + json.usage[i].api_version + '</td><td>' + json.usage[i].user + '</td><td >' + jagg.getDate(json.usage[i].lastAccess)+ '</td></tr>'));
                 }
                 if (length == 0) {
                     $('#lastAccessTable').hide();
@@ -191,6 +207,7 @@ var drawProviderAPIVersionUserLastAccess = function(from,to){
                     $('#lastAccessTable').dataTable({
                          "order": [[ 3, "desc" ]]
                     });
+                    $('select').css('width','60px');
                 }
 
             } else {

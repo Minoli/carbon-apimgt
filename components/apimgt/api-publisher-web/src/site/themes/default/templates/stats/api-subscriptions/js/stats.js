@@ -27,9 +27,7 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     var d = new Date();
                     var firstAccessDay = new Date(json.usage[0].year, json.usage[0].month - 1, json.usage[0].day);
                     var currentDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(),d.getHours(),d.getMinutes());
-
                     drawSubscriberCountByAPIs();
-
                 }
 
                 else if (json.usage && json.usage.length == 0 && statsEnabled) {
@@ -42,8 +40,6 @@ require(["dojo/dom", "dojo/domReady!"], function (dom) {
                     $('#middle').append($('<div class="errorWrapper"><span class="label top-level-warning"><i class="icon-warning-sign icon-white"></i>'
                         + i18n.t('errorMsgs.checkBAMConnectivity') + '</span><br/><img src="../themes/default/templates/stats/api-subscriptions/images/statsThumb.png" alt="Smiley face"></div>'));
                 }
-
-
             }
             else {
                 if (json.message == "AuthenticateError") {
@@ -173,7 +169,6 @@ var drawSubscriberCountByAPIs = function () {
 
                         dataStructure[0].versions.push({ version: "other", Count:allSubscriptionCount-versionCount});
                         colorRangeArray.push(chartColorScheme);
-
 
                         var randomColor=getRandomColor();
                         var rgb=hexToRgb(randomColor);
@@ -431,7 +426,6 @@ var drawSubscriberCountByAPIs = function () {
 
                             nameLabels.transition().duration(tweenDuration).attrTween("transform", textTween);
                             nameLabels.exit().remove();
-
                         }
 
                         // Interpolate the arcs in data space.
