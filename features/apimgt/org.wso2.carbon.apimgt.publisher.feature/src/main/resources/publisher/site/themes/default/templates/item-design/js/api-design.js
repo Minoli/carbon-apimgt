@@ -168,14 +168,13 @@ function APIDesigner(){
         event.data.add_resource(resource, path);
         //RESOURCES.unshift(resource);
         $("#resource_url_pattern").val("");
-        updateContextPattern();
         $(".http_verb_select").attr("checked",false);
     });
 
- 
+
 }
 
-APIDesigner.prototype.check_if_resource_exist = function(path, method){    
+APIDesigner.prototype.check_if_resource_exist = function(path, method){
     if(this.api_doc.paths[path] == undefined || this.api_doc.paths[path][method] == undefined){
         return false;
     }
@@ -192,7 +191,7 @@ APIDesigner.prototype.set_default_management_values = function(){
                 operations[i]["x-auth-type"] = OPTION_DEFAULT_AUTH;
             }
             else{
-                operations[i]["x-auth-type"] = DEFAULT_AUTH;                
+                operations[i]["x-auth-type"] = DEFAULT_AUTH;
             }
         }
         if(!operations[i]["x-throttling-tier"]){
@@ -220,7 +219,7 @@ APIDesigner.prototype.get_scopes = function(){
 }
 
 APIDesigner.prototype.has_resources = function(){
-    if(Object.keys(this.api_doc.paths).length == 0) 
+    if(Object.keys(this.api_doc.paths).length == 0)
         return false;
     else
         return true;
@@ -243,7 +242,7 @@ APIDesigner.prototype.update_elements = function(resource, newValue){
 };
 
 APIDesigner.prototype.update_elements_boolean = function(resource, newValue){
-    if(newValue == "true") 
+    if(newValue == "true")
         newValue = true;
     else
         newValue = false;
@@ -265,19 +264,19 @@ APIDesigner.prototype.init_controllers = function(){
     $("#name").change(function(e){ APIDesigner().api_doc.info.title = $(this).val() });
     $("#description").change(function(e){ APIDesigner().api_doc.info.description = $(this).val() });
 
-    this.container.delegate( ".delete_resource", "click", function( event ) {        
+    this.container.delegate( ".delete_resource", "click", function( event ) {
         var operations = API_DESIGNER.query($(this).attr('data-path'));
         var operations = operations[0]
         var i = $(this).attr('data-index');
         var pn = $(this).attr('data-path-name');
-        var op = $(this).attr('data-operation');        
+        var op = $(this).attr('data-operation');
         jagg.message({content:'Do you want to remove "'+op+' : '+pn+'" resource from list.',type:'confirm',title:"Remove Resource",
         okCallback:function(){
             API_DESIGNER = APIDesigner();
             console.log(i, pn, op, operations);
-            API_DESIGNER.render_resources(); 
+            API_DESIGNER.render_resources();
         }});
-        //delete resource if no operations       
+        //delete resource if no operations
     });
 
     this.container.delegate(".movedown_resource","click", function(){
@@ -289,8 +288,8 @@ APIDesigner.prototype.init_controllers = function(){
             operations[i] = operations[i+1];
             operations[i+1] = tmp;
         }
-        API_DESIGNER.render_resources();        
-    });     
+        API_DESIGNER.render_resources();
+    });
 
     this.container.delegate(".moveup_resource","click", function(){
         var operations = API_DESIGNER.query($(this).attr('data-path'));
@@ -301,13 +300,13 @@ APIDesigner.prototype.init_controllers = function(){
             operations[i] = operations[i-1];
             operations[i-1] = tmp;
         }
-        API_DESIGNER.render_resources();        
-    });     
+        API_DESIGNER.render_resources();
+    });
 
     this.container.delegate(".add_parameter", "click", function(event){
         var parameter = $(this).parent().find('.parameter_name').val();
         if(parameter == "") return false;
-        var resource_body = $(this).parent().parent();        
+        var resource_body = $(this).parent().parent();
         var resource = API_DESIGNER.query(resource_body.attr('data-path'));
         var resource = resource[0]
         if(resource.parameters ==undefined){
@@ -338,7 +337,7 @@ APIDesigner.prototype.init_controllers = function(){
                 "x-wso2-scopes":[]
             }
         };
-        var API_DESIGNER = APIDesigner();        
+        var API_DESIGNER = APIDesigner();
 		var scope = {
 			name : $("#scopeName").val(),
 			description : $("#scopeDescription").val(),
@@ -359,18 +358,18 @@ APIDesigner.prototype.init_controllers = function(){
 				return;
 			}
 		}
-		
+
         API_DESIGNER.api_doc.securityDefinitions.apim['x-wso2-scopes'].push(scope);
 		$("#define_scope_modal").modal('hide');
 		API_DESIGNER.render_scopes();
 		API_DESIGNER.render_resources();
-	}); 
+	});
 
     $("#swaggerEditor").click(API_DESIGNER.edit_swagger);
 
     $("#update_swagger").click(API_DESIGNER.update_swagger);
 }
- 
+
 APIDesigner.prototype.load_api_document = function(api_document){
     this.api_doc = api_document
     this.render_resources();
@@ -384,13 +383,13 @@ APIDesigner.prototype.load_api_document = function(api_document){
 
 
 APIDesigner.prototype.render_scopes = function(){
-    if($('#scopes-template').length){    
+    if($('#scopes-template').length){
         context = {
             "api_doc" : this.api_doc
         }
         var output = Handlebars.partials['scopes-template'](context);
         $('#scopes_view').html(output);
-    }    
+    }
 };
 
 APIDesigner.prototype.transform = function(api_doc){
@@ -423,15 +422,15 @@ APIDesigner.prototype.render_resources = function(){
 
     if(typeof(TIERS) !== 'undefined'){
         $('#resource_details').find('.throttling_select').editable({
-            emptytext: '+ Throttling',        
+            emptytext: '+ Throttling',
             source: TIERS,
             success : this.update_elements
         });
-    }   
+    }
 
     if(typeof(AUTH_TYPES) !== 'undefined'){
         $('#resource_details').find('.auth_type_select').editable({
-            emptytext: '+ Auth Type',        
+            emptytext: '+ Auth Type',
             source: AUTH_TYPES,
             autotext: "always",
             display: this.display_element,
@@ -440,10 +439,10 @@ APIDesigner.prototype.render_resources = function(){
     }
 
     $('#resource_details').find('.change_summary').editable({
-        emptytext: '+ Summary',        
+        emptytext: '+ Summary',
         success : this.update_elements,
         inputclass : 'resource_summary'
-    });  
+    });
 };
 
 APIDesigner.prototype.render_resource = function(container){
@@ -458,7 +457,7 @@ APIDesigner.prototype.render_resource = function(container){
         var textarea = container.find('.editor').ace({ theme: 'textmate', lang: 'javascript' ,fontSize: "10pt"});
         var decorator = container.find('.editor').data('ace');
         var aceInstance = decorator.editor.ace;
-        aceInstance.getSession().on('change', function(e) {   
+        aceInstance.getSession().on('change', function(e) {
             operation[0]["x-mediation-script"] = aceInstance.getValue();
         });
     }
@@ -497,42 +496,42 @@ APIDesigner.prototype.render_resource = function(container){
         },
         source: [ { value:true, text:"True" },{ value:false, text:"False"} ],
         success : this.update_elements_boolean
-    });    
+    });
 };
 
 APIDesigner.prototype.query = function(path){
     return jsonPath(this.api_doc,path);
 }
 
-APIDesigner.prototype.add_resource = function(resource, path){    
+APIDesigner.prototype.add_resource = function(resource, path){
     var path = path.toLowerCase();
     if(path.charAt(0) != "/")
         path = "/" + path;
     if(this.api_doc.paths[path] == undefined){
-        this.api_doc.paths[path] = resource;  
+        this.api_doc.paths[path] = resource;
     }
     else{
         this.api_doc.paths[path] = $.extend({}, this.api_doc.paths[path], resource);
-    } 
+    }
     this.render_resources();
 };
 
 APIDesigner.prototype.edit_swagger = function(){
     var designer =  APIDesigner();
     designer.swagger_editor = ace.edit("swagger_editor");
-    //var textarea = $('textarea[name="description"]').hide();    
+    //var textarea = $('textarea[name="description"]').hide();
     designer.swagger_editor.setFontSize(16);
     designer.swagger_editor.setTheme("ace/theme/textmate");
     designer.swagger_editor.getSession().setMode("ace/mode/yaml");
     designer.swagger_editor.getSession().setValue(jsyaml.safeDump(designer.api_doc));
-    
+
 };
 
 APIDesigner.prototype.update_swagger = function(){
     var designer =  APIDesigner();
     var json = jsyaml.safeLoad(designer.swagger_editor.getSession().getValue());
     designer.load_api_document(json);
-    $('#swaggerEditer').modal('toggle');    
+    $('#swaggerEditer').modal('toggle');
 };
 
 
@@ -616,7 +615,7 @@ $(document).ready(function(){
                     designer.add_default_resource();
                     $("#design_form").submit();
                 }
-            });            
+            });
             return false;
         }
 
@@ -696,7 +695,7 @@ function updateContextPattern(){
 
     if(context != ""){
         if(context.indexOf("{version}") < 0){
-            if(context.lastIndexOf('/') < 0){
+            if(!context.endsWith('/')){
                 context = context + '/';
             }
             context = context + "{version}";
