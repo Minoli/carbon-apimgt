@@ -1,6 +1,31 @@
 <% jagg.template("api/recently-added", function(inputs, outputs, jagg) { %>
 <% var stars = require(jagg.getThemeFile("utils/ratings/star-generator.js")); %>
-                 <h4>  <%=i18n.localize("recentlyAdded")%></h4>
+
+<div id="recently-added" class="panel panel-default">
+  <div class="panel-heading"><%=i18n.localize("recentlyAdded")%></div>
+  <div class="panel-body">
+  Loading ....
+  </div>
+  <script id="recently-added-template" type="text/x-handlebars-template">
+    {{#each apis}}
+    {{#if @index}}<hr />{{/if}}
+    <div class="row">
+      <div class="col-md-4">
+        <a href="<%=jagg.url("/site/pages/item-info.jag?")%>name={{ name }}&version={{ version }}&provider={{ provider }}" >
+          <img src="{{ thumbnailurl }}" width="70px" />
+        </a>
+      </div>
+      <div class="col-md-8">
+        <a href="<%=jagg.url("/site/pages/item-info.jag?")%>name={{ name }}&version={{ version }}&provider={{ provider }}" >      
+        <strong>{{ name }}-{{ version }}</strong>
+        </a>
+        <div>{{ provider }}</div>
+      </div>
+    </div>     
+    {{/each}}   
+  </script>  
+</div>
+
                      <%
         var urlPrefix;
         var tenant=request_tenant;
@@ -38,9 +63,7 @@
             </div>
 
         <% } %>
- <div class="aCenter box10" id="recentlyAdded">
-                        <div class="processingWrapper"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile('images/processing.gif'))%>" /></div>
-           </div>
+
          <script type="text/javascript">
                     $(function(){
                         jagg.post("/site/blocks/api/recently-added/ajax/list.jag", {
@@ -48,6 +71,11 @@
                                                <% if(tenant != null ) { %> ,tenant:'<%=tenant%>',limit:5 <% } %>
                                            }, function (result) {
                                                if (result.error == false) {
+                                                var source   = $("#recently-added-template").html();
+                                                var template = Handlebars.compile(source);
+                                                $("#recently-added .panel-body").html(template(result));
+
+
                                                    var i, api, apis = result.apis, length = apis.length;
                                                    $('#recentlyAdded').html('');
                                                    for (i = 0; i < length; i++) {

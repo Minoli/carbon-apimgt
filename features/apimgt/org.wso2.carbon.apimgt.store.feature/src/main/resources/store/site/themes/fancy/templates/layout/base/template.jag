@@ -10,28 +10,26 @@
         mww = 8;
     }
 %>
+    <div id="wrapper" >
+        <!-- Sidebar -->
+        <% if(outputs.left) { %>
+        <div id="sidebar-wrapper">
+            <% jagg.includeBlocks(outputs.left); %>
+            <% jagg.includeBlocks(outputs.right); %>
+        </div>
+        <% } %>                 
 
+        <!-- /#sidebar-wrapper -->
 
-    <% jagg.includeBlocks(outputs.top); %>
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span3">
-                <div class="left-side-col">
-                <% jagg.includeBlocks(outputs.left); %>
-                </div>
-            </div>
-            <div class="span<%=String(mw)%> <% if(mw==9){%>padding-from-right<%}%>">
-
-
-
-                        <% if(outputs.title && outputs.title=="APIs") { %><h2><%=outputs.title%></h2><% } %>
-                        <% jagg.includeBlocks(outputs.middle); %>
-
-            </div>
-            <div class="span2">
-                <% jagg.includeBlocks(outputs.right); %>
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <% jagg.includeBlocks(outputs.top); %>                
+                <% if(outputs.title && outputs.title=="APIs") { %><h2><%=outputs.title%></h2><% } %>            
+                <% jagg.includeBlocks(outputs.middle); %>            
             </div>
         </div>
+        <!-- /#page-content-wrapper -->
     </div>
-
+    <!-- /#wrapper -->
 <% }); %>
