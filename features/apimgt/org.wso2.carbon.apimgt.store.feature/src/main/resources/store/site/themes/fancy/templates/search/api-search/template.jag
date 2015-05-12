@@ -13,8 +13,7 @@ var tenant = jagg.getTenantDomain();
           </span>
         </div> 
         <!-- /input-group -->
-        <div id="apiSearchHelp" class="hide" >
-            <h4><%=i18n.localize("searchAPIHelpMsg1")%></h4>
+        <div id="apiSearchHelp" class="hide help-popover-content" >
             <ol>
                 <li><%=i18n.localize("searchAPIHelpMsg2")%></li>
                 <li><%=i18n.localize("searchAPIHelpMsg3")%></li>
@@ -30,7 +29,7 @@ var tenant = jagg.getTenantDomain();
         <%}%>        
     </form>
   </div>
-  <div class="col-md-6 api-search "><a href="#" class="help-text" rel="popover" data-popover-content="#apiSearchHelp"><i class="fa fa-question-circle"></i> Search Options</a>
+  <div class="col-md-6 api-search "><a href="#" title="<%=i18n.localize("searchAPIHelpMsg1")%>" class="help-text" data-placement="bottom" rel="popover" data-popover-content="#apiSearchHelp"><i class="fa fa-question-circle"></i> Search Options</a>
 </div>
 </div>
 <% }); %>

@@ -225,3 +225,5 @@ code {
 .api-search { margin-top: 15px; line-height: 30px;}
 
 .help-text { color:gray; }
+
+.help-popover-content { font-size: 0.9em }

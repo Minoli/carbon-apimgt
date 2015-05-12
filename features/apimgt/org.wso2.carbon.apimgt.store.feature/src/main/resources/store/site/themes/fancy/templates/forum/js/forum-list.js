@@ -43,6 +43,7 @@ function forum_load_topics(page, search) {
                 //set the pages
                 var options = {
                     currentPage: result.page,
+                    bootstrapMajorVersion:3,                    
                     totalPages: result.total_pages,
                     alignment: 'right',
                     onPageClicked: function (e, originalEvent, type, page) {
@@ -103,13 +104,20 @@ function forum_load_replies(page) {
             if (result.total_pages > 1) {
                 var options = {
                     currentPage: result.page,
+                    bootstrapMajorVersion:3,
                     totalPages: result.total_pages,
-                    alignment: 'right',
                     onPageClicked: function (e, originalEvent, type, page) {
                         forum_load_replies(page);
                     }
                 }
                 $('#forum_replies_paginator').bootstrapPaginator(options);
+                /*$('#forum_replies_paginator').bootpag({
+                   total: result.total_pages,
+                   page: result.page,
+                   maxVisible: 10
+                }).on('page', function(event, page){
+                    forum_load_replies(page) // or some ajax content loading...
+                });  */              
             }
 
             $(forum_reply_editor).summernote({

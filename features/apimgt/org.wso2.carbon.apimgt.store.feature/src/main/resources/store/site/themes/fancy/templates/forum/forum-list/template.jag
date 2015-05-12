@@ -25,33 +25,37 @@ if(inputs.api){
 %>
 
 <div id="forum_topics_list_page" class="forum-page">
-
     <div class="title-section">
         <h2><%=i18n.localize('forum')%></h2>
     </div>
 
-    <div class="content-section shadow-up">
-        <div class="content-data" >
-            <div class="row">
-                <div class="span6">
-                    <div class="form-search from-inline">
-                        <a href="<%= jagg.getAbsoluteUrl('/forum/new')+'?parentId=' + parentId + urlSuffix%>" class="btn btn-primary pull-left <%= needLoginStyleClass %> " style="margin-right:30px">
-                            <%=i18n.localize( 'forum.createNewTopic')%>
-                        </a>
-                        <div id="forum_topic_search_block" class="pull-left">
-                            <input type="text" class="input-x-large clearable search-input" placeholder="<%=i18n.localize('forum.searchForum')%>" id="forum_topic_search_value">
-                            <button class="btn btn-primary search-button" id="forum_topic_search" style="margin-left:-10px;border-radius:0;"><i class="icon-search icon-white"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div id="forum_topics_list_paginator" class="span6 pull-right"></div>
-            </div>
-            <div id="forum_topics_list" style="display:none"></div>
-            <div id="forum_no_topics" style="display:none" class="text-centre"><%=i18n.localize('forum.noTopicsFound')%></div>
+    <div class="row">
+        <div class="form-inline form-search col-lg-6 col-md-12 col-sm-12">
+          <div class="form-group">
+            <a href="<%= jagg.getAbsoluteUrl('/forum/new')+'?parentId=' + parentId + urlSuffix%>" class="btn btn-primary pull-left <%= needLoginStyleClass %> ">
+                <%=i18n.localize( 'forum.createNewTopic')%>
+            </a>&nbsp;
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" class="form-control clearable search-input" placeholder="<%=i18n.localize('forum.searchForum')%>" id="forum_topic_search_value">
+              <span class="input-group-btn">
+                <button class="btn btn-default search-button" id="forum_topic_search" ><i class="fa fa-search"></i> Search</button>
+              </span>
+            </div>  
+          </div>
+        </div>      
+        <div class="col-lg-6 col-md-12  col-sm-12">
+            <ul id="forum_topics_list_paginator" class="pull-right" style="margin:0px;float:right;"></ul>
         </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-12">
+        <div id="forum_topics_list" style="display:none"></div>
+        <div id="forum_no_topics" style="display:none" class="alert alert-info"><%=i18n.localize('forum.noTopicsFound')%></div>
+      </div>
+    </div>
 </div>
 
 
