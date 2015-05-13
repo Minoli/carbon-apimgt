@@ -39,7 +39,6 @@ An application is a logical collection of APIs. Applications allow you to use a 
 <form class="form-horizontal" id="appAddForm">
   <input type="hidden" id="apiPath" value="<%=apiPath%>"/>
   <input type="hidden" id="goBack" value="<%= encode.forHtmlAttribute(goBack)%>"/>
-  <input type="hidden"  id="tierDescriptions" name="tierDescriptions" value="<%=tierDescriptions%>"/>  
   <div class="form-group">
     <label class="control-label col-sm-2 " for="application-name"><%=i18n.localize("name")%></label>    
     <div class="col-sm-4">
@@ -75,6 +74,7 @@ An application is a logical collection of APIs. Applications allow you to use a 
           </div>          
           <div class="help-block"><%=i18n.localize("appHelpMsg")%>
           </div>
+          <input type="hidden"  id="tierDescriptions" name="tierDescriptions" value="<%=tierDescriptions%>"/>  
     </div>
   </div>
   <div class="form-group">

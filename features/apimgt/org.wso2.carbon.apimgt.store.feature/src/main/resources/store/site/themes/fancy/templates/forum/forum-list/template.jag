@@ -30,7 +30,7 @@ if(inputs.api){
     </div>
 
     <div class="row">
-        <div class="form-inline form-search col-lg-6 col-md-12 col-sm-12">
+        <div class="form-inline form-search col-lg-7 col-md-12 col-sm-12">
           <div class="form-group">
             <a href="<%= jagg.getAbsoluteUrl('/forum/new')+'?parentId=' + parentId + urlSuffix%>" class="btn btn-primary pull-left <%= needLoginStyleClass %> ">
                 <%=i18n.localize( 'forum.createNewTopic')%>
@@ -45,7 +45,7 @@ if(inputs.api){
             </div>  
           </div>
         </div>      
-        <div class="col-lg-6 col-md-12  col-sm-12">
+        <div class="col-lg-5 col-md-12 col-sm-12">
             <ul id="forum_topics_list_paginator" class="pull-right" style="margin:0px;float:right;"></ul>
         </div>
     </div>
