@@ -4,7 +4,7 @@
         var tabs = outputs.tabs, length = tabs.length;
         var i, index, tab, classes;
     %>
-    <ul class="nav nav-tabs all-tabs">
+    <ul class="nav nav-tabs all-tabs" role="tablist">
     <%
     for(i = 0; i < length; i++) {
         tab = tabs[i];
@@ -28,7 +28,7 @@
     for(i = 0; i < length; i++) {
         tab = tabs[i];
     %>
-    <div class="tab-pane <% if(i==0){%>active<% } %>" id="tab<%=String(i)%>"><% jagg.includeBlocks(tab.body); %></div>
+    <div class="tab-pane fade <% if(i==0){%>in active<% } %>" id="tab<%=String(i)%>"><% jagg.includeBlocks(tab.body); %></div>
     <% } %>
     </div>
 </div>

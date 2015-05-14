@@ -1,37 +1,52 @@
 <% jagg.template("api/provider-apis", function(inputs, outputs, jagg) {%>
 <% var stars = require(jagg.getThemeFile("utils/ratings/star-generator.js")); %>
-    <%if(outputs.apiOwner!=null){%> <h4><%=i18n.localize("moreAPI")%>  '<%=outputs.apiOwner%>'</h4><%}%>
+
+<%if(outputs.apiOwner!=null){%>
+<div id="recently-added" class="panel panel-default">
+  <div class="panel-heading"><%=i18n.localize("moreAPI")%>  '<%=outputs.apiOwner%>'</div>
+  <div class="panel-body">
     <%
     var urlPrefix;
     var tenant=request_tenant;
     if(tenant!=null) {urlPrefix="&tenant="+tenant;}else{urlPrefix='';}
 
     var i, api, path,apis = outputs.apis, thumbURL;
-    if(apis!=null){
+    if(apis!=null && apis.length > 0){
         length = apis.length;
         for(i = 0; i < length; i++) {
-	        api = apis[i];
-	        thumbURL = api.thumbURL;
-	        if(thumbURL && thumbURL.indexOf("images/") == 0) {
-	            thumbURL = jagg.getAbsoluteUrl(jagg.getThemeFile(thumbURL));
-	        } else {
+            api = apis[i];
+            thumbURL = api.thumbURL;
+            if(thumbURL && thumbURL.indexOf("images/") == 0) {
+                thumbURL = jagg.getAbsoluteUrl(jagg.getThemeFile(thumbURL));
+            } else {
                 thumbURL = jagg.getRegistryPath(thumbURL);
             }
             path = jagg.getMappedUrl("/site/pages/item-info.jag") + "?name=" + api.name + "&version=" + api.version +
                    "&provider=" + api.provider+ urlPrefix;
-	%>
-            <div class="container-fluid left-menu-back<% if (i%2 ==0){%>01<% }else{ %>02<% } %>">
-                <div class="row-fluid list-item-content">
-                    <div class="span4">
-                        <img src="<%=thumbURL%>" width="70px"/>
-                    </div>
-                    <div class="span8">
-                        <a href="<%=path%>" class="title" title="<%=api.name%>"><%=api.name%>-<%=api.version%></a>
-                        <div class="star-ratings"><%=stars.getStaticStars(jagg.getSiteContext(), api.rating, jagg
-                 .getUserTheme().base)%></div>
-                    </div>
-                </div>
-            </div>
+    %>
+        <%if(i){ %><hr /><% } %>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="<%=path%>" >
+              <img src="<%=thumbURL%>" width="70px" />
+            </a>
+          </div>
+          <div class="col-md-8">
+            <a href="<%=path%>" >      
+            <strong><%=api.name%>-<%=api.version%></strong>
+            </a>
+            <div class="star-ratings"><%=stars.getStaticStars(jagg.getSiteContext(), api.rating, jagg.getUserTheme().base)%></div>            
+          </div>
+        </div>   
     <%  }
-    } %>
+    }else{ %>
+        <div class="row">
+          <div class="col-md-12">
+            No other APIs from this provider.
+          </div>
+        </div>  
+    <%}%>
+  </div>
+</div>
+<%}%>
 <% }); %>

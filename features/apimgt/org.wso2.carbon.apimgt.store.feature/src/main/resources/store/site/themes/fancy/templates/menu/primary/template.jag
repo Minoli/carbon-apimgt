@@ -1,4 +1,6 @@
-<% jagg.template("menu/primary", function(inputs, outputs, jagg) { %>
+<% jagg.template("menu/primary", function(inputs, outputs, jagg) { 
+  var tenant = jagg.getTenantDomain();
+%>
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">

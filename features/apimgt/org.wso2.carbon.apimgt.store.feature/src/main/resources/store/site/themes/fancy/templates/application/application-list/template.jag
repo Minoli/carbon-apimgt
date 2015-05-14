@@ -222,7 +222,7 @@
       </div>
     <% } %>
     <% } else { %>
-    <p><%=i18n.localize("noAppMsg")%></p>
+    <div class="alert alert-info" role="alert"><%=i18n.localize("noAppMsg")%></div>
     <% } %>
 </div>
 <% }); %>
