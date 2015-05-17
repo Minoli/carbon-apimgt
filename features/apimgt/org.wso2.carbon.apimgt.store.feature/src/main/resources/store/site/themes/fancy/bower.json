@@ -14,6 +14,7 @@
     "jasny-bootstrap" : "latest",
     "handlebars":"latest",
     "jquery-validation":"latest",
-    "jqcloud2":"latest"
+    "jqcloud2":"latest",
+    "bootstrap-rating":"latest"
   }
 }    

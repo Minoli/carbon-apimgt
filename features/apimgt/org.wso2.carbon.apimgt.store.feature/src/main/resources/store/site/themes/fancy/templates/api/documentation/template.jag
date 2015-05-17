@@ -69,6 +69,10 @@ if(tenant!=null) {urlPrefix="&tenant="+tenant;}else{urlPrefix='';}
     </div>
     <%  } %>
     <% } %>
-    <% if(empty) { %><p>No documents have been associated with this API so far.</p><% } %>
+    <% if(empty) { %>
+    <div class="alert alert-info" style="margin-bottom:10px">
+    <i class="fa fa-info"></i> &nbsp;&nbsp; No documents have been associated with this API so far. 
+    </div>  
+    <% } %>
 </div>
 <% }); %>

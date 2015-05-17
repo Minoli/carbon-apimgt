@@ -57,24 +57,24 @@
     <%}%>
     <% if(api.wsdl && api.wsdl != ""){ %>        
     <p>
-        <a href="<%=api.wsdl%>" target="_blank"><h6><%=i18n.localize("wsdl")%></h6></a>
+        <a href="<%=api.wsdl%>" target="_blank"><h4><%=i18n.localize("wsdl")%></h4></a>
     </p>
     <% } %>
     <% if(api.wadl && api.wadl != ""){ %>
-        <h6><%=i18n.localize("wadl")%>:</h6>
+        <h4><%=i18n.localize("wadl")%>:</h4>
     <p>
         <a href="<%=api.wadl%>" target="_blank"><%=api.wadl%></a>
     </p>
         <% } %>
     <% if(api.description && api.description != ""){ %>
-        <h6><%=i18n.localize("desc")%>:</h6>
+        <h4><%=i18n.localize("desc")%>:</h4>
     <p>
         <%=api.description%>
     </p>
         <% } %>
 
     <% if(api.bizOwner&& api.bizOwner != ""){ %>
-        <h6><%=i18n.localize("busiOwner")%>:</h6>
+        <h4><%=i18n.localize("busiOwner")%>:</h4>
     <p>
         <%=api.bizOwner%> <% if(api.bizOwnerMail && api.bizOwnerMail!=""){%>
            [<a href="mailto:<%=api.bizOwnerMail%>"><%=api.bizOwnerMail%></a>]
@@ -82,7 +82,7 @@
     </p>
     <% } %>
     <% if(api.techOwner && api.techOwner != ""){ %>
-        <h6><%=i18n.localize("techOwner")%>:</h6>
+        <h4><%=i18n.localize("techOwner")%>:</h4>
     <p>
         <%=api.techOwner%>
         <% if(api.techOwnerMail && api.techOwnerMail!=""){%>
@@ -90,36 +90,32 @@
         <%}%>
     </p>
     <% } %>
-    <h5><%=i18n.localize("share")%>:</h5>
-    <div class="pagination">
-    <ul class="" style="margin:0px;">
-        <li class="active"><a class="share_links active" href="#" ref="social"><%=i18n.localize("SocialSites")%></a></li>
-        <li><a class="share_links" href="#" ref="embed"><%=i18n.localize("embed")%></a></li>
-        <li><a href="" id="api_mailto" ><i class="icon-envelope "></i> <%=i18n.localize("email")%></a></li>
-    </ul>
+    <h4><%=i18n.localize("share")%>:</h4>
+    <div class="btn-group" role="group" aria-label="...">
+      <button type="button" class="btn btn-default share_links" ref="social"><%=i18n.localize("SocialSites")%></button>
+      <button type="button" class="btn btn-default share_links" ref="embed"><%=i18n.localize("embed")%></button>
+      <a href="" id="api_mailto" class="btn btn-default"><i class="fa fa-envelope-o"></i> <%=i18n.localize("email")%></a>
     </div>
-    <div id="share_div_embed" class="hide share_dives">
-        <textarea id="embed_iframe"></textarea>
+    <div class="row">    
+    <div id="share_div_embed" class="share_dives col-sm-6" style="display:none">
+        <textarea id="embed_iframe" class="form-control "></textarea>
     </div>
-
+    </div>
     <div id="share_div_social" class="share_dives">
-    <!-- Facebook -->
-    <a class="social_links" id="facebook" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/facebook.png"))%>" alt="Facebook" /></a>
-
-    <!-- Twitter -->
-    <a class="social_links" id="twitter" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/twitter.png"))%>" alt="Twitter" /></a>
-
-    <!-- Google+ -->
-    <a class="social_links" id="googleplus" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/google.png"))%>" alt="Google" /></a>
-
-    <!-- Digg -->
-    <a class="social_links" id="digg" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/diggit.png"))%>" alt="Digg" /></a>
-
-    <div class="clearfix">
-    </div>
+        <!-- Facebook -->
+        <a class="social_links" id="facebook" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/facebook.png"))%>" alt="Facebook" /></a>
+        <!-- Twitter -->
+        <a class="social_links" id="twitter" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/twitter.png"))%>" alt="Twitter" /></a>
+        <!-- Google+ -->
+        <a class="social_links" id="googleplus" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/google.png"))%>" alt="Google" /></a>
+        <!-- Digg -->
+        <a class="social_links" id="digg" href="#" target="_blank"><img src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/diggit.png"))%>" alt="Digg" /></a>
+        <div class="clearfix">
     </div>
 
-    <h5><%=i18n.localize("comments")%>:</h5>
+    </div>
+
+    <h4><%=i18n.localize("comments")%>:</h4>
     <% if(user) jagg.includeBlock("comment/comment-add", null); %>
     <% jagg.includeBlock("comment/comment-list", {api:api}); %>
 </div>
@@ -130,10 +126,8 @@
         $('#embed_iframe').text('<iframe width="450" height="120" src="'+link.replace('info','widget')+'" frameborder="0" allowfullscreen></iframe>');
 
         $('.share_links').click(function(){
-            $('.share_links').removeClass('active');
-            $('.share_links').parent().removeClass('active');
-            $(this).addClass('active');
-            $(this).parent().addClass('active');
+            $('.share_links').removeClass('disabled');
+            $(this).addClass('disabled');
             $('.share_dives').hide();
             $('#share_div_' + $(this).attr('ref')).show('fast');
             return false;

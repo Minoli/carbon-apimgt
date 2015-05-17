@@ -8,13 +8,12 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
-.footer {
+.page-footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;
-  background-color: #f5f5f5;
   z-index: 1010;
   padding-top: 10px;
 }
@@ -31,7 +30,7 @@ body > .container {
   margin: 20px 0;
 }
 
-.footer > .container {
+.page-footer > .container {
   padding-right: 15px;
   padding-left: 15px;
 }
@@ -151,7 +150,7 @@ code {
     background: none;
 }
 
-@media(min-width:768px) {
+@media(min-width:1200px) {
     #wrapper {
         padding-left: 300px;
     }
@@ -227,3 +226,21 @@ code {
 .help-text { color:gray; }
 
 .help-popover-content { font-size: 0.9em }
+
+.api-details-table { margin-bottom: 15px; margin-top: 15px;}
+.api-details-table td table { margin: 0px 20px; }
+.api-details-table td table td{ padding: 0 0 5px 0; }
+.api-details-table td table th{ padding: 0 0 5px 0; min-width: 100px}
+
+
+.tab-content { border-width: 0px 1px 1px 1px; border-style: solid; border-color:#ddd; padding: 20px; min-height: 300px }
+
+/* API Overview Tab */
+.share-select { margin: 0;}
+.share-select li.active a{ background: #f5f5f5; border-color: #ddd; color: #777}
+.share-select li.active a:active{ background: #f5f5f5; border-color: #ddd; color: #777}
+.social_links img { border: 0 none; display: inline; padding: 5px; width: 50px; }
+#store-redirect-link { padding: 40px; text-align: center; }
+
+/* Customize swagger UI */
+#swagger-section .container{ width: 100% }

@@ -11,7 +11,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="<%=jagg.getMappedUrl("/site/pages/index.jag")%>">WSO2 API Store</a>
+    <a class="navbar-brand" href="<%=jagg.urlTenanted("/site/pages/index.jag")%>">WSO2 API Store</a>
   </div>
   <div id="navbar" class="collapse navbar-collapse">
   <% if(outputs.tenantDomains==null || outputs.tenantDomains.indexOf(tenant) > -1 ){%>  
