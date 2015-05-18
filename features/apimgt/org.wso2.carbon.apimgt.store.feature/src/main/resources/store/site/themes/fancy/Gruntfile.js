@@ -3,11 +3,19 @@ module.exports = function(grunt) {
     shell: {
         multiple: {
             command: [
-               'bower install',
-               'mkdir -p lib',
-               'rm -rf lib/*',
-               'mv bower_components/** lib/',
-               'rm -rf bower_components'
+                'bower install',
+                'mkdir -p lib',
+               'cp -r bower_components/bootstrap/dist/ lib/bootstrap',
+               'cp -r bower_components/bootstrap-rating/ lib/bootstrap-rating',
+               'cp -r bower_components/bootstrap-select/dist/ lib/bootstrap-select',
+               'cp -r bower_components/jquery/dist/jquery.min.js lib/jquery.min.js',
+               'mkdir -p lib/font-awesome/',
+               'cp -r bower_components/font-awesome/css lib/font-awesome/css',
+               'cp -r bower_components/font-awesome/fonts lib/font-awesome/fonts',
+               'cp -r bower_components/handlebars/handlebars.min.js lib/handlebars.min.js',
+               'cp -r bower_components/jasny-bootstrap/dist/ lib/jasny-bootstrap',
+               'cp -r bower_components/jquery-validation/dist/ lib/jquery-validation/',
+               'cp -r bower_components/zeroclipboard/dist/ lib/zeroclipboard'
             ].join('&&')
         }
     },
