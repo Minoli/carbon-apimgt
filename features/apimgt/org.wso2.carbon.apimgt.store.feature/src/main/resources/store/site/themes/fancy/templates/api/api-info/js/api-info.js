@@ -22,7 +22,8 @@ function triggerSubscribe() {
         name:api.name,
         version:api.version,
         provider:api.provider,
-        tier:tier
+        tier:tier,
+        tenant: jagg.site.tenant
     }, function (result) {
         $("#subscribe-button").html('Subscribe');
         $("#subscribe-button").removeAttr('disabled');
