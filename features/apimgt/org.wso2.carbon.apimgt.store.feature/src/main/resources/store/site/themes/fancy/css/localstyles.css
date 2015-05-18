@@ -243,4 +243,10 @@ code {
 #store-redirect-link { padding: 40px; text-align: center; }
 
 /* Customize swagger UI */
-#swagger-section .container{ width: 100% }
+#swagger-ui-container {max-width: 100%;}
+#swagger-ui-container .container{ width: 100% !important;padding: 0 !important; }
+#swagger-ui-container #api_info { display: none;}
+#resources_container ul { padding-left: 0px;}
+
+/* Subscription page styles */
+.copybtn-wrapper { float: right;}

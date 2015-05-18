@@ -12,5 +12,6 @@ $(document).ready(function(){
         e.preventDefault();
     });
 
+    $('select').selectpicker();
 	
 });

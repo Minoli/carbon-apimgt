@@ -15,6 +15,7 @@
     "handlebars":"latest",
     "jquery-validation":"latest",
     "jqcloud2":"latest",
-    "bootstrap-rating":"latest"
+    "bootstrap-rating":"latest",
+    "bootstrap-select":"latest"
   }
 }    

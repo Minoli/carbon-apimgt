@@ -10,7 +10,7 @@ jagg.initializer("page/base", {
         jagg.addHeaderCSS("page/base", "bootstrap3", "lib/bootstrap/dist/css/bootstrap.min.css");
         jagg.addHeaderCSS("page/base", "font-awesome", "lib/font-awesome/css/font-awesome.min.css");
         //jagg.addHeaderCSS("page/base", "styles-layout", "css/styles-layout.css");
-        //jagg.addHeaderCSS("page/base", "styles-application", "css/styles-application.css");
+        jagg.addHeaderCSS("page/base", "bootstrap-select-css", "lib/bootstrap-select/dist/css/bootstrap-select.min.css");
         jagg.addHeaderCSS("page/base", "localstyles", "css/localstyles.css");        
 
         //include jquery at the top
@@ -23,12 +23,13 @@ jagg.initializer("page/base", {
 
         jagg.addHeaderJS("page/base", "jagg", "templates/page/base/js/jagg.js");
         jagg.addHeaderJS("page/base", "base", "templates/page/base/js/base.js");
-        jagg.addHeaderJS("page/base", "handlebars", "templates/api/swagger/swagger/lib/handlebars-2.0.0.js");
+        //jagg.addHeaderJS("page/base", "handlebars", "templates/api/swagger/swagger/lib/handlebars-2.0.0.js");
         jagg.addHeaderJSCode("page/base", "jagg.site", 'jagg.site = ' + stringify(jaggi) + ';');
         jagg.addHeaderJSCode("page/base", "jagg.loggedIn", 'jagg.loggedIn = ' + Boolean(jagg.getUser()) + ';');
 
         jagg.addFooterJS("page/base", "handlebars", "lib/main.js");
-        jagg.addFooterJS("page/base", "bootstrap2js", "lib/bootstrap/dist/js/bootstrap.min.js");
+        jagg.addFooterJS("page/base", "bootstrap3js", "lib/bootstrap/dist/js/bootstrap.min.js");
+        jagg.addFooterJS("page/base", "bootstrap-selectjs", "lib/bootstrap-select/dist/js/bootstrap-select.min.js");
         jagg.addFooterJS("page/base", "jquery.validator", "js/lib/jquery.validate.min.js");
         jagg.addFooterJS("page/base", "jquery.validate.password", "js/lib/jquery.validate.password.js");
         jagg.addFooterJS("page/base", "jquery.cookie", "js/lib/jquery.cookie.js");

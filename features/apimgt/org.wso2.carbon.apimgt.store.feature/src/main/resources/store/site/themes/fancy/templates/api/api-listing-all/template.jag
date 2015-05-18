@@ -154,9 +154,9 @@ var reqUrl = request.getRequestURI();
                     <div class="thumbnail">
                         <a href="<%=path%>">
                             <% if(thumbURL == null) { %>
-                            <img class="thumb responsive" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/api-default.png"))%>" alt=""/>
+                            <img class="thumb responsive" width="150" height="150" src="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("images/api-default.png"))%>" alt=""/>
                             <% } else{ %>
-                            <img class="thumb responsive" src="<%=thumbURL%>"  alt=""/>
+                            <img class="thumb responsive" width="150" height="150" src="<%=thumbURL%>"  alt=""/>
                             <% } %>
                         </a>
                         <div class="caption">

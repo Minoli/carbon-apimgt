@@ -100,7 +100,7 @@ if(tenant!=null) {
           <div class="col-md-6">
             <table class="api-details-table">
             <tr>
-                <td><img src="<%=thumbURL%>" width="100px" class="img-thumbnail" /></td>
+                <td><img src="<%=thumbURL%>" width="150px" class="img-thumbnail" /></td>
                 <td>
                         <table  style="float:left">
                             <tbody>
@@ -162,30 +162,37 @@ if(tenant!=null) {
                                 }
 
                         %>
-                           <label><%=i18n.localize("applications")%></label>
-                           <select id="application-list">
-                               <%if(!subscribedToDefault){%>
-                               <option value="-"><%=i18n.localize("selectApp")%></option>
-                               <%}%>
-                               <option value="createNewApp"><%=i18n.localize("newApp")%></option>
-                               <optgroup label="<%=i18n.localize("myApps")%>">
-                                   <%
-                                   for(i = 0; i < length; i++) {
-                                   app = apps[i];
-                                   if(app.status=="APPROVED"){
+                        <form  class="form-horizontal">
+                          <div class="form-group">
+                            <label for="application-list" class="col-sm-2  control-label"><%=i18n.localize("applications")%></label>
+                            <div class="col-sm-10">
+                               <select id="application-list"  class="selectpicker">
+                                   <%if(!subscribedToDefault){%>
+                                   <option value="-"><%=i18n.localize("selectApp")%></option>
+                                   <%}%>
+                                   <option value="createNewApp"><%=i18n.localize("newApp")%></option>
+                                   <optgroup label="<%=i18n.localize("myApps")%>">
+                                       <%
+                                       for(i = 0; i < length; i++) {
+                                       app = apps[i];
+                                       if(app.status=="APPROVED"){
 
-                                   %>
-                                   <%if (app.name=="DefaultApplication"){%>
-                                   <option selected value="<%=app.id%>"><%= encode.forHtml(app.name)%></option>
-                                   <%}else{%>
-                                   <option value="<%=app.id%>"><%= encode.forHtml(app.name)%></option>
-                                   <% }}} %>
-                               </optgroup>
+                                       %>
+                                       <%if (app.name=="DefaultApplication"){%>
+                                       <option selected value="<%=app.id%>"><%= encode.forHtml(app.name)%></option>
+                                       <%}else{%>
+                                       <option value="<%=app.id%>"><%= encode.forHtml(app.name)%></option>
+                                       <% }}} %>
+                                   </optgroup>
 
-                           </select>
+                               </select>
+                            </div>
+                        </div>                                                 
                         <% }if(user && api) { %>
-                        <label><b><%=i18n.localize("tiers")%></b></label>
-                        <select id="tiers-list" name="tiers-list">
+                        <div class="form-group">
+                          <label for="tiers-list"  class="col-sm-2  control-label"><%=i18n.localize("tiers")%></label>
+                          <div class="col-sm-10">
+                        <select id="tiers-list" name="tiers-list" class="selectpicker">
                             <%var tiersList = api.tiers, denied = false, tiersAvailable = false;
                             var existingFirstTierDesc = [];
 
@@ -207,7 +214,7 @@ if(tenant!=null) {
                             <%}
                             denied = false;
                              } %>
-                        </select>
+                        </select>                                                                              
                         <%
                             var firstTierDesc = '';
                             if(existingFirstTierDesc.length ==0){
@@ -217,7 +224,7 @@ if(tenant!=null) {
                                firstTierDesc = existingFirstTierDesc[0];
                             }
                         %>
-                        <span class="help-block" id="tierDesc"><%=firstTierDesc%>
+                          <p class="help-block"  id="tierDesc"><%=firstTierDesc%>
                         <%if(api.tiers[0].tierAttributes!=null){
                         var tierAttrs=api.tiers[0].tierAttributes.split(',');
                         for(var k=0;k<tierAttrs.length;k++){
@@ -226,8 +233,9 @@ if(tenant!=null) {
                         %>
                             <%if(tierKey!=''){%><br/><%=tierKey%> : <%=tierVal%>
                         <%}}}%>
-                        </span>
-
+                          </p>
+                          </div>
+                        </div>
                         <div class="simple-space-maker">
                             <button onclick="triggerSubscribe()" id="subscribe-button" <%if(!tiersAvailable){%>disabled="disabled"<%}%>
                                 class="btn btn-primary<% if(!user) { %>need-login<% } %>"><%=i18n.localize("subscribe")%>
@@ -236,6 +244,7 @@ if(tenant!=null) {
                                 <span id="subsBtnDesc" class="help-block"><%=i18n.localize("noTiers")%></span>
                             <%}%>
                         </div>
+                    </form>                                                  
                         <% } 
                         }%>
                         </div>
