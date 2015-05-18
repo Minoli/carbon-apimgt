@@ -250,3 +250,5 @@ code {
 
 /* Subscription page styles */
 .copybtn-wrapper { float: right;}
+.token { padding: 5px; margin-bottom: 5px;}
+.curl-copyinfo{ display: none;}
