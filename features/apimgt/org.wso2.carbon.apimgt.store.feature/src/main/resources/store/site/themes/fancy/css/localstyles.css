@@ -233,7 +233,8 @@ code {
 .api-details-table td table th{ padding: 0 0 5px 0; min-width: 100px}
 
 
-.tab-content { border-width: 0px 1px 1px 1px; border-style: solid; border-color:#ddd; padding: 20px; min-height: 300px }
+.tab-content { border-width: 0px 1px 1px 1px; border-style: solid; border-color:#ddd; padding: 20px; 
+  min-height: 300px }
 
 /* API Overview Tab */
 .share-select { margin: 0;}
@@ -241,6 +242,7 @@ code {
 .share-select li.active a:active{ background: #f5f5f5; border-color: #ddd; color: #777}
 .social_links img { border: 0 none; display: inline; padding: 5px; width: 50px; }
 #store-redirect-link { padding: 40px; text-align: center; }
+input#access_token {margin-right: 20px}
 
 /* Customize swagger UI */
 #swagger-ui-container {max-width: 100%;}
@@ -252,3 +254,8 @@ code {
 .copybtn-wrapper { float: right;}
 .token { padding: 5px; margin-bottom: 5px;}
 .curl-copyinfo{ display: none;}
+
+
+/* Brand */
+.navbar-brand { background: url('../images/wso2.svg'); background-size: 75px ; background-repeat: no-repeat; 
+padding-left: 80px; margin-left: 10px; font-size: 1.8em; background-position: 0px 5px; }

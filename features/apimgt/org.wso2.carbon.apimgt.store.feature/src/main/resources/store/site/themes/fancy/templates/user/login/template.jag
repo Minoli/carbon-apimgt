@@ -34,9 +34,9 @@ i18n.init(request,localeResourcesBasePath);
   <li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%=i18n.localize("selectTheme")%> <span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
-      <li><a>Theme 1</a></li>
-      <li><a>Theme 2</a></li>
-      <li><a>Theme 3</a></li>
+      <li><a href="<%=jagg.urlTenanted(jagg.getThemeFile("templates/user/theme/template.jag?subthemeToApply=default"))%>">Default</a></li>    
+      <li><a href="<%=jagg.urlTenanted(jagg.getThemeFile("templates/user/theme/template.jag?subthemeToApply=united"))%>">United</a></li>
+      <li><a href="<%=jagg.urlTenanted(jagg.getThemeFile("templates/user/theme/template.jag?subthemeToApply=paper"))%>">Paper</a></li>
     </ul>
   </li>
   <li class="dropdown">

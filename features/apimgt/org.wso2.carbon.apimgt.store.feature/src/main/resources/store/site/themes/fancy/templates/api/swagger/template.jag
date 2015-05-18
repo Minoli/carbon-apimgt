@@ -96,14 +96,13 @@ $(document).ready(function(){
   change_token();
 });  
 </script>
-<div id="authorizations" class="">
+<div id="authorizations" class="col-sm-12">
     <form class="form-horizontal">
 <% if(subscriptions != null && subscriptions.length > 0) { %>
 
 <div class="form-group">
-  <label class="col-sm-2 control-label"></label>
-  <div class="col-sm-10">  
-    <label for="">Try</label>
+  <label class="col-sm-2 control-label"><label for="">Try</label></label>
+  <div class="col-sm-10">      
     <select id="sub_app_list" class="inline">
     <% for(var i = 0 ;subscriptions.length > i;i++){ %>
       <option value="" data-sandbox="<%= subscriptions[i].SANDBOX_KEY %>" data-production="<%= subscriptions[i].PRODUCTION_KEY %>"><%= encode.forHtml(subscriptions[i].application)%></option>
@@ -136,9 +135,11 @@ $(document).ready(function(){
 
       <div class="form-group">
         <label class="col-sm-2 control-label">Set Request Header</label>
-        <div class="input-group col-sm-10">
+        <div class=" col-sm-10">
+        <div class="input-group">
           <span class="input-group-addon" id="sizing-addon1">Authorization : Bearer</span>
           <input type="text" id="access_token" name="access_token" placeholder="Access Token" class="form-control">
+        </div>
         </div>
       </div>
     </form>
