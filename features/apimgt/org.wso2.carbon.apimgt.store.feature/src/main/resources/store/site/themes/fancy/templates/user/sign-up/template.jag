@@ -13,17 +13,16 @@
             var context= "<%=jagg.getSiteContext()%>";
         </script>
 <div class="title-section"><h2><%=i18n.localize("signupTitle")%></h2></div>
-<div class="content-section shadow-up">
-<div class="content-data">
-<form class="form-horizontal" id="sign-up" autocomplete="off">
-<fieldset>
-    <div class="control-group">
-        <label class="control-label"  for="newUsername"><%=i18n.localize("username")%>:<span class="requiredAstrix">*</span></label>
-        <div class="controls">
-            <input id="newUsername" name="newUsername" minlength="5" type="text" class="required validName input-medium noSpace" />
+
+<form class="form-horizontal"  id="sign-up" autocomplete="off">
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="newUsername"><%=i18n.localize("username")%>:<span class="requiredAstrix">*</span></label>
+        <div class="col-sm-4">
+            <input id="newUsername" name="newUsername" minlength="5" type="text" class="required validName input-medium noSpace form-control" />
             <%              
                 if(request_tenant != null) { %>
-                     <label class="lblTenantDomainName"  for="newUsername"> @<%=request_tenant%></label>
+                     <label class="lblTenantDomainName" class="control-label col-sm-2" for="newUsername"> @<%=request_tenant%></label>
             <%    }
             %>
            
@@ -31,41 +30,34 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label" for="newPassword"><%=i18n.localize("password")%>:<span class="requiredAstrix">*</span></label>
-        <div class="controls">
-            <div class="row-fluid">
-                    <div class="span6">
-                        <input type="password" class="input-large password validPassword" id="newPassword" name="newPassword" />
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="newPassword"><%=i18n.localize("password")%>:<span class="requiredAstrix">*</span></label>
+        <div class="col-sm-4">
+            <input type="password" class="input-large password validPassword form-control" id="newPassword" name="newPassword" />
 
-                        <div class="help-block" id="password-help" style="display:none">
-                          <%=i18n.localize("pwHelpMsgLine1")%>
-                            <ul>
-                                <li><%=i18n.localize("pwHelpMsgLine2")%></li>
-                                <li><%=i18n.localize("pwHelpMsgLine3")%></li>
-                                <li><%=i18n.localize("pwHelpMsgLine4")%></li>
-                                <li><%=i18n.localize("pwHelpMsgLine5")%></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <div class="span6">
-                        <div class="password-meter" style="display:none;">
-                            <div class="password-meter-message"></div>
-                            <div class="password-meter-bg">
-                                <div class="password-meter-bar"></div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="help-block" id="password-help" style="display:none">
+              <%=i18n.localize("pwHelpMsgLine1")%>
+                <ul>
+                    <li><%=i18n.localize("pwHelpMsgLine2")%></li>
+                    <li><%=i18n.localize("pwHelpMsgLine3")%></li>
+                    <li><%=i18n.localize("pwHelpMsgLine4")%></li>
+                    <li><%=i18n.localize("pwHelpMsgLine5")%></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="password-meter" style="display:none;">
+                <div class="password-meter-message"></div>
+                <div class="password-meter-bg">
+                    <div class="password-meter-bar"></div>
                 </div>
             </div>
+        </div>
     </div>
 
-
-
-    <div class="control-group">
-            <label class="control-label" for="newPasswordConfirm"><%=i18n.localize("retypePassword")%>:<span class="requiredAstrix">*</span></label>
-            <div class="controls"><input type="password" class="matchPasswords input-large" id="newPasswordConfirm" /></div>
+    <div class="form-group">
+            <label class="control-label col-sm-2" for="newPasswordConfirm"><%=i18n.localize("retypePassword")%>:<span class="requiredAstrix">*</span></label>
+            <div class="col-sm-4"><input type="password" class="matchPasswords input-large form-control" id="newPasswordConfirm" /></div>
     </div>
     
     <%
@@ -86,19 +78,26 @@
             } 
     %>
 	<%if (required == true) {%>
-         <div class="control-group">
-            <label class="control-label" for="<%=i%>cliamUri"><%=i18n.localize(field.name, field.name)%>:
+         <div class="form-group">
+            <label class="control-label col-sm-2" for="<%=i%>cliamUri"><%=i18n.localize(field.name, field.name)%>:
            	 <span class="requiredAstrix">*</span>
             </label>
-            <div class="controls"><input type="text" id="<%=i%>cliamUri" name="<%=i%>cliamUri" class="<%=inputClass%>"/></div>
+            <div class="col-sm-4"><input type="text" id="<%=i%>cliamUri" name="<%=i%>cliamUri" class="<%=inputClass%> form-control"/></div>
     	</div>
 	 <%} %>
     <% } %>
-        <div class="controls" style="padding-bottom:10px;" id="moreFieldsLink"><a onclick="showMoreFields()"><i class="icon-plus-sign"></i>More Details</a></div>
-	<div class="controls" id="hideFieldsLink" style="display:none;padding-bottom:10px;">
-		<a onclick="hideMoreFields()">
-		<i class="icon-minus-sign"></i>More Details</a>
+        <div class="row">
+            <div class= "col-md-2"></div>
+            <div  class= "col-md-4"  style="padding-bottom:10px;" id="moreFieldsLink"><a class="moreDetails" onclick="showMoreFields()"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span> More Details</a></div>
+	    </div>
+	    <div class="row">
+            <div class= "col-md-2"></div>
+	        <div class= "col-md-4" id="hideFieldsLink" style="display:none;padding-bottom:10px;">
+            <a class="moreDetails" onclick="hideMoreFields()">
+            <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span> More Details</a>
+	    </div>
 	</div>
+
         <div id="moreFields" style="display:none">
 		<%		
 		for(i = 0; i < length; i++) {
@@ -121,23 +120,26 @@
 			}
 		%>
 			<%if (required != true) {%>
-         			<div class="control-group">
-            				<label class="control-label" for="<%=i%>cliamUri"><%=i18n.localize(field.name, field.name)%>:
-           	 			</label>
-            				<div class="controls"><input type="text" id="<%=i%>cliamUri" name="<%=i%>cliamUri" class="<%=inputClass%>"/></div>
-    				</div>
+                <div class="form-group">
+                        <label class="control-label col-md-2" for="<%=i%>cliamUri"><%=i18n.localize(field.name, field.name)%>:
+                    </label>
+                    <div class= "col-md-4">
+                        <input type="text" id="<%=i%>cliamUri" name="<%=i%>cliamUri" class="<%=inputClass%> form-control"/>
+                    </div>
+                </div>
 	 		<%} %>
 		<% } %>
 	</div>
 	<input type="hidden" id="fieldCount" name="fieldCount" value="<%=length%>"/>
-    <div class="form-actions">
-        <input class="submit btn btn-primary" type="submit" value="<%=i18n.localize("submit")%>"/>
-
+    <div class="row">
+        <div class= "col-md-2"></div>
+        <div class= "col-md-4">
+            <input class="submit btn btn-primary" type="submit" value="<%=i18n.localize("submit")%>"/>
+        </div>
     </div>
-</fieldset>
-      </form>
-</div>
-</div>
+</form>
+
+
 <form id="signUpRedirectForm" method="post" action="<%=jagg.getAbsoluteUrl(jagg.getThemeFile("templates/user/sign-up/redirector.jag"))%>">
         <input type="hidden" name="redirectToHome" id="redirectToHome" value="<%= jagg.getSiteContext() %>" />
 </form>

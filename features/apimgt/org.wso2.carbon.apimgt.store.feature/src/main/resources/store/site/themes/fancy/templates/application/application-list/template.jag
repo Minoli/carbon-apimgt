@@ -58,15 +58,15 @@
         var foo='<%= encode.forJavaScript(apps) %>';
 
     </script>
-    <table cellspacing="0" cellpadding="0" class="table table-bordered table-striped" id="applicationTable">
+    <table cellspacing="0" cellpadding="0" width="100%" class="table table-bordered table-striped table-responsive" id="applicationTable">
         <thead>
             <tr class="alt first last">
-                <th value="Name" rel="0" style="width:20%;"><%=i18n.localize("name")%></th>
-                <th value="Tier" rel="0" style="width:15%;"><%=i18n.localize("throttlingTier")%></th>
-                <th value="Status" rel="0" style="width:10%;"><%=i18n.localize("status")%></th>
-                <th value="callbackUrl" rel="0" style="width:15%;"><%=i18n.localize("callbackUrl")%></th>
-                <th value="callbackUrl" rel="0" style="width:15%;">Description</th>
-                <th value="Actions" rel="1" colspan="2" style="width:25%;"><%=i18n.localize("actions")%></th>
+                <th value="Name" class="col-md-2"><%=i18n.localize("name")%></th>
+                <th value="Tier" class="col-md-2"><%=i18n.localize("throttlingTier")%></th>
+                <th value="Status" class="col-md-1"><%=i18n.localize("status")%></th>
+                <th value="callbackUrl" class="col-md-2"><%=i18n.localize("callbackUrl")%></th>
+                <th value="callbackUrl" class="col-md-2">Description</th>
+                <th value="Actions" colspan="2" class="col-md-3"><%=i18n.localize("actions")%></th>
             </tr>
         </thead>
         <tbody>
@@ -86,9 +86,9 @@
                 else if(i + 1 == length) classes = "last";
             %>
             <tr class="<%=classes%>" data-value="<%= encode.forHtmlAttribute(app.name)%>" tier-value="<%= encode.forHtml(app.tier)%>" callback-value="<%=  encode.forHtmlAttribute(callbackUrl)%>" description-value="<%=  encode.forHtmlAttribute(description)%>" api-count="<%= encode.forHtml(app.apiCount)%>" >
-                <td class="app_name_cell"><%= encode.forHtml(app.name)%></td>
+                <td class="app_name_cell wrap-text"><%= encode.forHtml(app.name)%></td>
                 <td class="app_name_cell">
-                    <select id="<%="tiers" + i%>" name="<%="tiers" + i%>" class="applicationTierSelect" disabled="disabled">
+                    <select id="<%="tiers" + i%>" name="<%="tiers" + i%>" class="applicationTierSelect form-control" disabled="disabled">
                         <%for(j=0; j<tiers.length; j++){%>
                             <option value="<%=tiers[j].tierName%>"
                                 <%if(app.tier == tiers[j].tierName){print("selected=\"selected\"")}%>>
@@ -110,11 +110,11 @@
                 }
                 %>
                 <td class="app_name_cell"><%= encode.forHtml(statusVal)%></td>
-				<td class="app_name_cell"><%= encode.forHtml(callbackUrl)%></td>
+				<td class="app_name_cell wrap-text"><%= encode.forHtml(callbackUrl)%></td>
 				<td class="app_name_cell"><%= encode.forHtml(description)%></td>
                 <td>
                     <%if(!disableUpdate){%>
-                        <a onclick="changeAppNameMode(this)"><i class="icon-edit"></i> <%=i18n.localize("edit")%></a>
+                        <a onclick="changeAppNameMode(this)"><span class="glyphicon glyphicon-edit"></span> <%=i18n.localize("edit")%></a>
                     <%}%>
                     <div style="display: none;">
                         <button class="btn btn-primary" onclick="updateApplication(this)">Save</button>
@@ -122,7 +122,7 @@
                     </div>
                 </td>
                 <td>
-                    <a onclick="deleteApp(this)"><i class="icon-trash"></i> Delete</a>
+                    <a onclick="deleteApp(this)"><span class="glyphicon glyphicon-trash"></span> Delete</a>
                 </td>
             </tr>
             <% } %>

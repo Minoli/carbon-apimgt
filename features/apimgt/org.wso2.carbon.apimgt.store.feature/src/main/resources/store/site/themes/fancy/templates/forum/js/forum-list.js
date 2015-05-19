@@ -1,6 +1,3 @@
-
-
-
 Handlebars.registerHelper('html_sanitize', function(context, options) {
   context = html_sanitize(context);
   return context;
@@ -126,6 +123,8 @@ function forum_load_replies(page) {
 
             initStars();
 
+            $('#forum-rating').rating();
+
         } else {
             jagg.message({
                 content: result.message,
@@ -138,7 +137,6 @@ function forum_load_replies(page) {
 
 $(document).ready(function () {
     // START - Topic bindings
-
     // Add new forum topic.
     $(document).on("click", '#add-forum-topic', function () {
 	jagg.sessionAwareJS({redirect:'/site/pages/index.jag'});

@@ -2,14 +2,14 @@ function changeAppNameMode(linkObj){
     jagg.sessionAwareJS({redirect:'site/pages/applications.jag'});
     var theTr = $(linkObj).parent().parent();
     var appName = $(theTr).attr('data-value');
-    $('td:first',theTr).html('<div class="row-fluid"><div class="span6"> <input class="app_name_new" maxlength="70" value="'
-        +'" type="text" /> </div></div> ');
+    $('td:first',theTr).html('<div class="row-fluid"> <input class="wrap-text app_name_new form-control"  value="'
+        +'" type="text" /> </div> ');
     $('td:first',theTr).find(".app_name_new").val(theTr.attr('data-value'));
-    $('td:eq(3)',theTr).html('<div class="row-fluid"><div class="span6"> <input class="callback_new validInput" maxlength="70" value="'
-        +'" type="text" /> </div></div> ');
+    $('td:eq(3)',theTr).html('<div class="row-fluid"> <input class="wrap-text callback_new validInput form-control"  value="'
+        +'" type="text" /> </div> ');
     $('td:eq(3)',theTr).find(".callback_new").val(theTr.attr('callback-value'));
-    $('td:eq(4)',theTr).html('<div class="row-fluid"><div class="span6"> <input class="description-new" maxlength="70" value="'
-        +'" type="text" /> </div></div> ');
+    $('td:eq(4)',theTr).html('<div class="row-fluid"><input class="description-new form-control"  value="'
+        +'" type="text" /> </div> ');
     $('td:eq(4)',theTr).find(".description-new").val(theTr.attr('description-value'));
     //Hide the Edit link
     $("td:eq(4)", theTr).children("a").hide();
@@ -65,7 +65,8 @@ function changeAppNameMode(linkObj){
         }
     });
     var row = $(linkObj).parent().parent();
-    $("td:eq(1)", theTr).children("select").removeAttr("disabled");
+    $("td:eq(1)", theTr).children("select").prop('disabled',false);
+    $("td:eq(1)", theTr).children("select").selectpicker('refresh');
 }
 function updateApplication_reset(linkObj){
     jagg.sessionAwareJS({redirect:'site/pages/applications.jag'});
@@ -76,7 +77,8 @@ function updateApplication_reset(linkObj){
     var description = $(theTr).attr('description-value');
     $('td:first',theTr).text(appName);
     $("td:eq(1)", theTr).children("select").val(tier);
-    $("td:eq(1)", theTr).children("select").attr("disabled", "disabled");
+    $("td:eq(1)", theTr).children("select").prop('disabled',true);
+    $("td:eq(1)", theTr).children("select").selectpicker('refresh');
     $('td:eq(3)',theTr).text(callbackUrl);
     $('td:eq(4)',theTr).text(description);
     //Hide the Save and Cancel buttons
