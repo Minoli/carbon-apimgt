@@ -11,13 +11,15 @@ jagg.initializer("page/base", {
         jagg.addHeaderCSS("page/base", "font-awesome", "lib/font-awesome/css/font-awesome.min.css");
         //jagg.addHeaderCSS("page/base", "styles-layout", "css/styles-layout.css");
         jagg.addHeaderCSS("page/base", "bootstrap-select-css", "lib/bootstrap-select/css/bootstrap-select.min.css");
-        jagg.addHeaderCSS("page/base", "localstyles", "css/localstyles.css");        
+        jagg.addHeaderCSS("page/base", "localstyles", "css/localstyles.css");
+        jagg.addHeaderCSS("page/base", "bootstrap-rating.css", "lib/bootstrap-rating/bootstrap-rating.css");
 
         //include jquery at the top
         jagg.addHeaderJS("page/base", "jquery1.9.0", "lib/jquery.min.js");        
         jagg.addHeaderJS("page/base", "i18n", "js/lib/i18n/i18next-1.5.9.js");
         jagg.addHeaderJS("page/base", "csrf", "js/lib/jquery-csrf.js");
-        jagg.addHeaderJS("page/base", "handlebars", "lib/handlebars.min.js");        
+        jagg.addHeaderJS("page/base", "handlebars", "lib/handlebars.min.js");
+        jagg.addHeaderJS("page/base", "bootstrap-rating.js", "lib/bootstrap-rating/bootstrap-rating.js");
        
 
 

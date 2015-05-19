@@ -25,6 +25,7 @@
         <strong>{{ name }}-{{ version }}</strong>
         </a>
         <div>{{ displayOwner }}</div>
+        <input type="hidden" class="rating recent_rating" disabled="disabled" value="{{ rates }}" />
       </div>
     </div>     
     {{/each}}   
@@ -56,6 +57,7 @@
           var source   = $("#recently-added-template").html();
           var template = Handlebars.compile(source);
           $("#recently-added .panel-body").html(template(result));
+          $(".recent_rating").rating();
          } else {
              jagg.message({content:result.message,type:"error"});
          }

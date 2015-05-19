@@ -259,3 +259,7 @@ input#access_token {margin-right: 20px}
 /* Brand */
 .navbar-brand { background: url('../images/wso2.svg'); background-size: 75px ; background-repeat: no-repeat; 
 padding-left: 80px; margin-left: 10px; font-size: 1.8em; background-position: 0px 5px; }
+
+
+/* Rating color */
+.rating-symbol { color: orange;}

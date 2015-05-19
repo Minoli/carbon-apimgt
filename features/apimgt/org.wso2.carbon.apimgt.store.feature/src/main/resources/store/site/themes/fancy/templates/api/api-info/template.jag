@@ -1,5 +1,4 @@
 <% jagg.template("api/api-info", function(inputs, outputs, jagg) { %>
-<% var stars = require(jagg.getThemeFile("utils/ratings/star-generator.js"));  %>
 
 <%
 var i, length, app, thumbURL, api = outputs.api, apps = outputs.applications, deniedTiers = outputs.deniedTiers, user = outputs.user,isRatingActivated = outputs.isRatingActivated;
@@ -117,11 +116,8 @@ if(tenant!=null) {
                                     <div class="average-rating"><%=api.rates%></div>
                                 </td>
                                 <%}%>
-                                <td colspan="<%=colspan%>">
-                                    <div class="star-ratings">
-                                        <% if(user) { %><%=stars.getDynamicStars(api.userRate)%>
-                                        <% } else { %><%=stars.getStaticStars(jagg.getSiteContext(), api.userRate,jagg.getUserTheme().base)%><% } %>
-                                    </div>
+                                <td >
+                                    <input type="hidden" class="rating" value="<%= api.userRate %>" />                                    
                                 </td>
 
                             </tr>
